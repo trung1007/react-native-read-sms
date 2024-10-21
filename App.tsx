@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -11,46 +11,77 @@ import {
 } from 'react-native';
 
 const App = () => {
-   const [receiveSmsPermission, setReceiveSmsPermission] = useState('');
 
-  const requestSmsPermission = async () => {
-    try {
-      const permission = await PermissionsAndroid
-                .request(PermissionsAndroid.PERMISSIONS.RECEIVE_SMS);
-      setReceiveSmsPermission(permission);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const KNN = require('ml-knn')
+  const [KNN_JSON_MODEL_Data, set_KNN_JSON_MOEL_Data] = useState<typeof KNN>([])
+  const [trainDataSetArray, setTrainDataSetArray] = useState([])
+  const [trainDataLabelArray, setTrainDataLabelArray] = useState([])
 
-  useEffect(() => {
-    requestSmsPermission();
-  }, []);
+  const dictionaryW2V = require('./assets/data/dataset_new_vector_wav2vec.json')
+  const trainData = require('./assets/data/trainData.json')
+  const testData = require('./assets/data/testData.json')
 
-  useEffect(() => {
-    if (receiveSmsPermission === PermissionsAndroid.RESULTS.GRANTED) {
-      let subscriber = DeviceEventEmitter.addListener(
-        'onSMSReceived',
-        message => {
-          const {messageBody, senderPhoneNumber } = JSON.parse(message);
-           Alert.alert(
-          'SMS received',
-          `Message Body: ${messageBody} & sender number: ${senderPhoneNumber}`,
-     );
-        },
-      );
+  function convertWordToVec(trainData:any){
+    const trainDataText:string[] =[]
+    const trainDataLabel:number[] = []
+    trainData.map((item:any)=>{
+      trainDataText.push(item.text)
+      if(item.spam){
+        trainDataLabel.push(1)
+      }else{
+        trainDataLabel.push(0)
+      }
+    })
+    console.log(trainDataLabel.length);
+    saveTrainLabel(trainDataLabel)
+  }
 
-      return () => {
-        subscriber.remove();
-      };
-    }
-  }, [receiveSmsPermission]);
+  async function saveTrainLabel(trainDataLabel:any){
+
+  }
+
+  useEffect(()=>{
+    // convertWordToVec(trainData)
+    
+  })
+
+  // const [receiveSmsPermission, setReceiveSmsPermission] = useState('');
+
+  // const handleSmsPermissionAndSubcription = async () => {
+  //   try {
+  //     const permission = await PermissionsAndroid
+  //       .request(PermissionsAndroid.PERMISSIONS.RECEIVE_SMS);
+  //     setReceiveSmsPermission(permission);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  //   if (receiveSmsPermission === PermissionsAndroid.RESULTS.GRANTED) {
+  //     let subscriber = DeviceEventEmitter.addListener(
+  //       'onSMSReceived',
+  //       message => {
+  //         const { messageBody, senderPhoneNumber } = JSON.parse(message);
+  //         Alert.alert(
+  //           'SMS received',
+  //           `Message Body: ${messageBody} & sender number: ${senderPhoneNumber}`,
+  //         );
+  //       },
+  //     );
+
+  //     return () => {
+  //       subscriber.remove();
+  //     };
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   handleSmsPermissionAndSubcription()
+  // }, [receiveSmsPermission]);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <Text style={styles.titleText}>
-          Listen to incoming SMS from React Native App 
+          Listen to incoming SMS from React Native App
           using React Native Bridge
         </Text>
       </View>
@@ -59,11 +90,11 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
 
   },
-  titleText:{
-    
+  titleText: {
+
   }
 })
 export default App;
