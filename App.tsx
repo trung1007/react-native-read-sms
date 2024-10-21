@@ -9,6 +9,7 @@ import {
   DeviceEventEmitter,
   StyleSheet,
 } from 'react-native';
+import RNFS from 'react-native-fs'
 
 const App = () => {
 
@@ -37,11 +38,21 @@ const App = () => {
   }
 
   async function saveTrainLabel(trainDataLabel:any){
-
+    const path = RNFS.DocumentDirectoryPath + 'trainLabelArray.json'
+    console.log({path})
+    const trainLabelJson = JSON.stringify(trainDataLabel, null, 2)
+    try {
+      await RNFS.writeFile(path, trainLabelJson, "utf8")
+      console.log("Saved file success");
+      
+    } catch (error) {
+        console.log("Error when saved file: " + error);
+        
+    }
   }
 
   useEffect(()=>{
-    // convertWordToVec(trainData)
+    convertWordToVec(trainData)
     
   })
 
