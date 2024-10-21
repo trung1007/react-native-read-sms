@@ -22,39 +22,119 @@ const App = () => {
   const trainData = require('./assets/data/trainData.json')
   const testData = require('./assets/data/testData.json')
 
-  function convertWordToVec(trainData:any){
-    const trainDataText:string[] =[]
-    const trainDataLabel:number[] = []
-    trainData.map((item:any)=>{
+
+
+  function convertWordToVec(trainData: any) {
+    const trainDataText: string[] = []
+    const trainDataLabel: number[] = []
+    trainData.map((item: any) => {
       trainDataText.push(item.text)
-      if(item.spam){
+      if (item.spam) {
         trainDataLabel.push(1)
-      }else{
+      } else {
         trainDataLabel.push(0)
       }
     })
-    console.log(trainDataLabel.length);
+
+    const trainDataArray = []
+    for (let i = 0; i < trainDataText.length; i++) {
+      var trainProcess = (i + 1) * 100 / trainDataText.length
+      console.log(trainProcess.toFixed(2) + "%");
+      let wordPerSentence = trainDataText[i].toLowerCase().trim().split(" ");
+      let arrayPerSentence: any[] = []
+      for (let j = 0; j < wordPerSentence.length; j++) {
+        if (wordPerSentence[j] in dictionaryW2V) {
+          arrayPerSentence.push(dictionaryW2V[wordPerSentence[j]])
+        }
+        else {
+          arrayPerSentence.push(20000000000000)
+        }
+        flattenArray(arrayPerSentence)
+      }
+      trainDataArray.push(arrayPerSentence)
+    }
     saveTrainLabel(trainDataLabel)
+    saveTrainData(trainDataArray)
   }
 
-  async function saveTrainLabel(trainDataLabel:any){
-    const path = RNFS.DocumentDirectoryPath + 'trainLabelArray.json'
-    console.log({path})
-    const trainLabelJson = JSON.stringify(trainDataLabel, null, 2)
+  function flattenArray(arr: any) {
+    return arr.flat(Infinity); // Flatten to 1D array
+  }
+
+  //Save train Sentence data
+  async function saveTrainData(trainData: any) {
+    const path = RNFS.DocumentDirectoryPath + 'trainDataArray.json'
+    const trainDataJson = JSON.stringify(trainData)
     try {
-      await RNFS.writeFile(path, trainLabelJson, "utf8")
-      console.log("Saved file success");
-      
+      await RNFS.writeFile(path, trainDataJson)
+      console.log("Saved Data file success");
     } catch (error) {
-        console.log("Error when saved file: " + error);
-        
+      console.log("Error when saved file: " + error);
     }
   }
 
-  useEffect(()=>{
+  // Save train label data
+  async function saveTrainLabel(trainDataLabel: any) {
+    const path = RNFS.DocumentDirectoryPath + 'trainLabelArray.json'
+    const trainLabelJson = JSON.stringify(trainDataLabel)
+    try {
+      await RNFS.writeFile(path, trainLabelJson)
+      console.log("Saved Label file success");
+
+    } catch (error) {
+      console.log("Error when saved file: " + error);
+
+    }
+  }
+
+  //Read Train Label Data
+  async function readTrainLabel() {
+    const path = RNFS.DocumentDirectoryPath + 'trainLabelArray.json'
+    try {
+      const response = await RNFS.readFile(path)
+      const convertResponse = JSON.parse(response)
+      setTrainDataLabelArray(convertResponse)
+    } catch (error) {
+      console.log("Error when read file: " + error);
+    }
+  }
+
+  //Read Train Sentence Data
+  async function readTrainData() {
+    const path = RNFS.DocumentDirectoryPath + 'trainDataArray.json'
+    const [response, setResponse] = useState([])
+    try {
+      const response = await RNFS.readFile(path)
+      const convertResponse = JSON.parse(response)
+      setResponse(convertResponse)
+    } catch (error) {
+      console.log("Error when read file: " + error);
+    }
+    setTrainDataSetArray(response)
+  }
+
+  async function trainKnnModel(trainData: any) {
     convertWordToVec(trainData)
+    readTrainData()
+    readTrainLabel()
+
+  }
+
+  useEffect(() => {
+    // convertWordToVec(trainData)
+    const processAsyncData = async () => {
+      // Perform your asynchronous actions here
+      await readTrainData();
+      await readTrainLabel();
+    };
+
+    // Call the async function
+    processAsyncData();
+
+    console.log(trainDataSetArray);
     
-  })
+
+  }, [])
 
   // const [receiveSmsPermission, setReceiveSmsPermission] = useState('');
 
