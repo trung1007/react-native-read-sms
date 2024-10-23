@@ -39,7 +39,7 @@ const App = () => {
     const trainDataArray = []
     for (let i = 0; i < trainDataText.length; i++) {
       var trainProcess = (i + 1) * 100 / trainDataText.length
-      console.log(trainProcess.toFixed(2) + "%");
+      // console.log(trainProcess.toFixed(2) + "%");
       let wordPerSentence = trainDataText[i].toLowerCase().trim().split(" ");
       let arrayPerSentence: any[] = []
       for (let j = 0; j < wordPerSentence.length; j++) {
@@ -63,7 +63,9 @@ const App = () => {
 
   //Save train Sentence data
   async function saveTrainData(trainData: any) {
-    const path = RNFS.DocumentDirectoryPath + 'trainDataArray.json'
+    const path = RNFS.DocumentDirectoryPath + '/trainDataArray.json'
+    console.log("Saved path" + path);
+
     const trainDataJson = JSON.stringify(trainData)
     try {
       await RNFS.writeFile(path, trainDataJson)
@@ -73,9 +75,31 @@ const App = () => {
     }
   }
 
+  //Read Train Sentence Data
+  async function readTrainData() {
+    const path = RNFS.DocumentDirectoryPath + '/trainDataArray.json';
+    console.log("Read path: " + path);
+    try {
+      console.log("Checking if file exists...");
+      const fileExists = await RNFS.exists(path);
+      if (!fileExists) {
+        console.log("File does not exist at path:", path);
+        return;
+      }
+      console.log("Reading file...");
+      const response = await RNFS.readFile(path);
+      const convertResponse = JSON.parse(response);
+      // console.log("File read successfully:", convertResponse);
+      setTrainDataSetArray(convertResponse)
+      console.log(trainDataSetArray);
+    } catch (error) {
+      console.error('Error reading file:', error);
+    }
+  }
+
   // Save train label data
   async function saveTrainLabel(trainDataLabel: any) {
-    const path = RNFS.DocumentDirectoryPath + 'trainLabelArray.json'
+    const path = RNFS.DocumentDirectoryPath + '/trainLabelArray.json'
     const trainLabelJson = JSON.stringify(trainDataLabel)
     try {
       await RNFS.writeFile(path, trainLabelJson)
@@ -89,7 +113,7 @@ const App = () => {
 
   //Read Train Label Data
   async function readTrainLabel() {
-    const path = RNFS.DocumentDirectoryPath + 'trainLabelArray.json'
+    const path = RNFS.DocumentDirectoryPath + '/trainLabelArray.json'
     try {
       const response = await RNFS.readFile(path)
       const convertResponse = JSON.parse(response)
@@ -99,40 +123,57 @@ const App = () => {
     }
   }
 
-  //Read Train Sentence Data
-  async function readTrainData() {
-    const path = RNFS.DocumentDirectoryPath + 'trainDataArray.json'
-    const [response, setResponse] = useState([])
-    try {
-      const response = await RNFS.readFile(path)
-      const convertResponse = JSON.parse(response)
-      setResponse(convertResponse)
-    } catch (error) {
-      console.log("Error when read file: " + error);
-    }
-    setTrainDataSetArray(response)
-  }
+
 
   async function trainKnnModel(trainData: any) {
     convertWordToVec(trainData)
     readTrainData()
     readTrainLabel()
+  }
 
+  async function testSaveData(params: any) {
+    const path = RNFS.DocumentDirectoryPath + '/test.json'
+    const test_data = JSON.stringify(params)
+    console.log(test_data);
+
+    try {
+      await RNFS.writeFile(path, test_data)
+      console.log("Save test data success");
+    } catch (error) {
+      console.log("Error when saved file: " + error);
+    }
+  }
+  async function readSaveData() {
+    const path = RNFS.DocumentDirectoryPath + '/test.json';
+    try {
+      console.log("Checking if file exists...");
+      const fileExists = await RNFS.exists(path);
+      if (!fileExists) {
+        console.log("File does not exist at path:", path);
+        return;
+      }
+      console.log("Reading file...");
+      const response = await RNFS.readFile(path);
+      console.log("File read successfully:", response);
+    } catch (error) {
+      console.log("Error when reading file: " + error);
+    }
   }
 
   useEffect(() => {
     // convertWordToVec(trainData)
-    const processAsyncData = async () => {
-      // Perform your asynchronous actions here
-      await readTrainData();
-      await readTrainLabel();
-    };
+    readTrainData()
+    // readSaveData()
+    // const processAsyncData = async () => {
+    //   // Perform your asynchronous actions here
+    //   await readTrainData();
+    //   await readTrainLabel();
+    // };
+    // // Call the async function
+    // processAsyncData();
 
-    // Call the async function
-    processAsyncData();
+    // console.log(trainDataSetArray);
 
-    console.log(trainDataSetArray);
-    
 
   }, [])
 
