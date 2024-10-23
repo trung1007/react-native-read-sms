@@ -14,7 +14,7 @@ import RNFS from 'react-native-fs'
 const App = () => {
 
   const KNN = require('ml-knn')
-  const [KNN_JSON_MODEL_Data, set_KNN_JSON_MOEL_Data] = useState<typeof KNN>([])
+  const [KNN_JSON_MODEL_Data, set_KNN_JSON_MODEL_Data] = useState<typeof KNN>([])
   const [trainDataSetArray, setTrainDataSetArray] = useState([])
   const [trainDataLabelArray, setTrainDataLabelArray] = useState([])
 
@@ -78,22 +78,26 @@ const App = () => {
   //Read Train Sentence Data
   async function readTrainData() {
     const path = RNFS.DocumentDirectoryPath + '/trainDataArray.json';
-    console.log("Read path: " + path);
     try {
-      console.log("Checking if file exists...");
+      console.log("Checking if file trainDataArray exists...");
       const fileExists = await RNFS.exists(path);
       if (!fileExists) {
         console.log("File does not exist at path:", path);
-        return;
+        return false; // Indicates that the file read failed
       }
-      console.log("Reading file...");
+
+      console.log("File trainDataArray exists and start reading file...");
       const response = await RNFS.readFile(path);
       const convertResponse = JSON.parse(response);
-      // console.log("File read successfully:", convertResponse);
-      setTrainDataSetArray(convertResponse)
-      console.log(trainDataSetArray);
+      // console.log("File read successfully:" + convertResponse);
+      return convertResponse
+      // setTrainDataSetArray(convertResponse);
+      // console.log(trainDataSetArray);
+
+      // return true; // Indicates that the file read was successful
     } catch (error) {
       console.error('Error reading file:', error);
+      return false; // Indicates an error occurred during the file read
     }
   }
 
@@ -113,56 +117,97 @@ const App = () => {
 
   //Read Train Label Data
   async function readTrainLabel() {
-    const path = RNFS.DocumentDirectoryPath + '/trainLabelArray.json'
+    const path = RNFS.DocumentDirectoryPath + '/trainLabelArray.json';
     try {
-      const response = await RNFS.readFile(path)
-      const convertResponse = JSON.parse(response)
-      setTrainDataLabelArray(convertResponse)
+      console.log("Checking if file trainLabelArray exists...");
+      const fileExists = await RNFS.exists(path);
+      if (!fileExists) {
+        console.log("File does not exist at path:", path);
+        return false; // Indicates that the file read failed
+      }
+      console.log("File trainLabelArray exists and start reading file...");
+      const response = await RNFS.readFile(path);
+      const convertResponse = JSON.parse(response);
+      console.log("File read successfully");
+      setTrainDataLabelArray(convertResponse);
+      return convertResponse; // Indicates that the file read was successful
     } catch (error) {
-      console.log("Error when read file: " + error);
+      console.log('Error when reading file:', error);
+      return false; // Indicates an error occurred during the file read
     }
   }
 
-
-
-  async function trainKnnModel(trainData: any) {
-    convertWordToVec(trainData)
-    readTrainData()
-    readTrainLabel()
-  }
-
-  async function testSaveData(params: any) {
-    const path = RNFS.DocumentDirectoryPath + '/test.json'
-    const test_data = JSON.stringify(params)
-    console.log(test_data);
-
+  //Save KNN model
+  const saveKNN_JSON = async (knn_model: any) => {
+    const path = RNFS.DocumentDirectoryPath + '/KnnModel.json';
+    // console.log(knn_model);
     try {
-      await RNFS.writeFile(path, test_data)
-      console.log("Save test data success");
+      const KNN_JSON = JSON.stringify(knn_model, null, 2);
+      // Attempt to write the JSON string to the file
+      await RNFS.writeFile(path, KNN_JSON);
+      console.log("Save model success");
     } catch (error) {
-      console.log("Error when saved file: " + error);
+      console.log('Error when saving model:', error);
     }
-  }
-  async function readSaveData() {
-    const path = RNFS.DocumentDirectoryPath + '/test.json';
+  };
+
+  //Read KNN model
+  const readKNN_JSON = async () => {
+    const path = RNFS.DocumentDirectoryPath + '/KnnModel.json'
+    console.log({ path });
     try {
-      console.log("Checking if file exists...");
+      console.log("Checking if file KnnModel exists...");
       const fileExists = await RNFS.exists(path);
       if (!fileExists) {
         console.log("File does not exist at path:", path);
         return;
       }
-      console.log("Reading file...");
-      const response = await RNFS.readFile(path);
-      console.log("File read successfully:", response);
+      // Đọc nội dung của tệp JSON
+      const KNN_JSON = await RNFS.readFile(path);
+      const parse_KNN_MODEL = JSON.parse(KNN_JSON); // Chuyển chuỗi JSON thành đối tượng
+      const KNN_model = KNN.load(parse_KNN_MODEL)
+      set_KNN_JSON_MODEL_Data(KNN_model)
+      console.log('Đọc tệp thành công và mô hình KNN đã được khôi phục');
     } catch (error) {
-      console.log("Error when reading file: " + error);
+      console.log('Lỗi khi đọc tệp:', error);
+    }
+  };
+
+  async function trainKnnModel(trainData: any) {
+    // convertWordToVec(trainData)
+    // const dataRead = await readTrainData();
+    // const labelRead = await readTrainLabel();
+    // // console.log(dataRead);
+    // // Check if both files were read successfully before proceeding
+    // if (!dataRead || !labelRead) {
+    //   console.log('Failed to read training data or labels. Aborting model creation.');
+    //   return;
+    // }
+
+    var train_dataset = [
+      flattenArray([[0, 0, 0], [0, 1, 0]]),
+      flattenArray([[0, 1, 1], [1, 1, 0]]),
+      flattenArray([[1, 1, 0], [1, 0, 1]]),
+      flattenArray([[2, 2, 2], [1, 2, 0]]),
+      flattenArray([[1, 2, 2], [1, 2, 1]]),
+      flattenArray([[2, 1, 2], [2, 2, 2]])
+    ];
+
+    var train_labels = [0, 0, 0, 1, 1, 1];
+
+    try {
+      // console.log(trainDataSetArray);
+      const KNN_model = new KNN(train_dataset, train_labels, { k: 2 });
+      await saveKNN_JSON(KNN_model);
+      await readKNN_JSON()
+    } catch (error) {
+      console.log('Error creating KNN model:', error);
     }
   }
 
   useEffect(() => {
     // convertWordToVec(trainData)
-    readTrainData()
+    // readTrainData()
     // readSaveData()
     // const processAsyncData = async () => {
     //   // Perform your asynchronous actions here
@@ -174,8 +219,35 @@ const App = () => {
 
     // console.log(trainDataSetArray);
 
+    const getModel = async (trainData: any) => {
+      await trainKnnModel(trainData); // Wait for the training to complete
+      console.log("Training completed.");
+    };
+
+    // Create an async function inside useEffect to use `await`
+    const fetchModel = async () => {
+      await getModel(trainData);
+    };
+
+
+    fetchModel(); // Call the async function
 
   }, [])
+  useEffect(() => {
+    if (KNN_JSON_MODEL_Data.length !== 0) {
+      console.log("KNN_JSON_MODEL_Data has been set with the model:", KNN_JSON_MODEL_Data);
+      // Perform any further logic that depends on the model being set here
+      var test_dataset = [
+        flattenArray([[0.9, 0.9, 0.9], [1, 1, 1]]),
+        flattenArray([[1.1, 1.1, 1.1], [1.3, 1.3, 1.3]]),
+        flattenArray([[1.1, 1.1, 1.2], [1.3, 1.3, 1.2]]),
+        flattenArray([[1.2, 1.2, 1.2], [1.4, 1.4, 1.4]])
+      ];
+      var ans = KNN_JSON_MODEL_Data.predict(test_dataset)
+      console.log(ans);
+      
+    }
+  }, [KNN_JSON_MODEL_Data])
 
   // const [receiveSmsPermission, setReceiveSmsPermission] = useState('');
 
