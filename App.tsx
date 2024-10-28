@@ -22,6 +22,7 @@ const App = () => {
   const test = require('./assets/data/test.json')
   const trainData = require('./assets/data/trainData.json')
   const testData = require('./assets/data/testData.json')
+  const [isModelLoaded, setIsModelLoaded] = useState(false);
 
 
 
@@ -340,73 +341,93 @@ const App = () => {
       console.log('Error creating KNN model:', error);
     }
   }
+
+  const [receiveSmsPermission, setReceiveSmsPermission] = useState('');
+  const [message, setMessage] = useState('')
+  const [spam, setSpam] = useState('')
+
+
   useEffect(() => {
     const getModel = async () => {
-      await readKNN_JSON()
-    }
+      await readKNN_JSON();
+      setIsModelLoaded(true); // Set model loaded state after reading the model
+    };
+  
     if (KNN_JSON_MODEL_Data.length === 0) {
-      getModel()
+      getModel();
     }
-    else{
-      let testMessage= "Hãy tham gia cùng vô số cá nhân đã đạt được thành công với chương trình của chúng tôi. Hãy hành động ngay bây giờ và bắt đầu sống cuộc sống mà bạn luôn mong muốn."
-      var test_dataset = convertTestToDetect(testMessage)
-      console.log("predict message: " +  testMessage);
-      var ans = KNN_JSON_MODEL_Data.predict(test_dataset)
-      console.log(ans);
-    }
-  }, [KNN_JSON_MODEL_Data])
-
-  // function handleDetectMessage(message:string){
-  //   let messageTodetect = convertTestToDetect(message)
-  //   console.log("message received array: ");
-
-  //   console.log(messageTodetect);
-
-  //   var ans = '1'
-
-  //   setSpam(ans)
-  //   return ans
-  // }
-
-  // const [receiveSmsPermission, setReceiveSmsPermission] = useState('');
-  // const [message, setMessage] = useState('')
-  // const [spam, setSpam] = useState('')
-
-  // const handleSmsPermissionAndSubcription = async () => {
-  //   try {
-  //     const permission = await PermissionsAndroid
-  //       .request(PermissionsAndroid.PERMISSIONS.RECEIVE_SMS);
-  //     setReceiveSmsPermission(permission);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  //   if (receiveSmsPermission === PermissionsAndroid.RESULTS.GRANTED) {
-  //     let subscriber = DeviceEventEmitter.addListener(
-  //       'onSMSReceived',
-  //       message => {
-  //         const { messageBody, senderPhoneNumber } = JSON.parse(message);
-  //         setMessage(messageBody)
-
-  //         // Alert.alert(
-  //         //   'SMS received',
-  //         //   `Message Body: ${messageBody} & sender number: ${senderPhoneNumber}`,
-  //         // );
-  //       },
-  //     );
-
-  //     return () => {
-  //       subscriber.remove();
-  //     };
-  //   }
-  // }
+  }, [KNN_JSON_MODEL_Data]);
 
   // useEffect(() => {
-  //   handleSmsPermissionAndSubcription()
-  //   // handleDetectMessage(message)
-  // }, [receiveSmsPermission]);
+  //   const getModel = async () => {
+  //     await readKNN_JSON()
+  //   }
+  //   if (KNN_JSON_MODEL_Data.length === 0) {
+  //     getModel()
+  //   }
+  //   else {
+  //     var test_mess = "quay video để làm căn cứ xét duyệt khoản vay"
+  //     console.log(message)
+  //     var test_dataset = convertTestToDetect(test_mess)
+  //     var test_dataset1 = convertTestToDetect(message)
 
+  //     console.log("predict message expect: " + test_mess);
+  //     console.log("predict message actual: " + message);
 
+  //     var ans_expect = KNN_JSON_MODEL_Data.predict(test_dataset)
+  //     var ans_actual = KNN_JSON_MODEL_Data.predict(test_dataset1)
 
+  //     console.log("result expect: " + ans_expect);
+  //     console.log("result actual: " + ans_actual);
+
+  //     setSpam(ans_actual)
+  //   }
+  // }, [KNN_JSON_MODEL_Data])
+
+  const handleSmsPermissionAndSubcription = async () => {
+    try {
+      const permission = await PermissionsAndroid
+        .request(PermissionsAndroid.PERMISSIONS.RECEIVE_SMS);
+      setReceiveSmsPermission(permission);
+    } catch (err) {
+      console.log(err);
+    }
+    if (receiveSmsPermission === PermissionsAndroid.RESULTS.GRANTED) {
+      let subscriber = DeviceEventEmitter.addListener(
+        'onSMSReceived',
+        message => {
+          const { messageBody, senderPhoneNumber } = JSON.parse(message);
+          setMessage(messageBody)
+          // console.log(messageBody);
+          // Alert.alert(
+          //   'SMS received',
+          //   `Message Body: ${messageBody} & sender number: ${senderPhoneNumber}`,
+          // );
+          if (isModelLoaded) {
+            predictMessage(messageBody);
+          }
+        },
+      );
+
+      return () => {
+        subscriber.remove();
+      };
+    }
+  }
+
+  const predictMessage = (message:any) => {
+    const test_dataset = convertTestToDetect(message);
+  
+    console.log("Predict message: " + message);
+    const ans_actual = KNN_JSON_MODEL_Data.predict(test_dataset);
+    console.log("Result actual: " + ans_actual);
+    setSpam(ans_actual);
+  };
+
+  useEffect(() => {
+    handleSmsPermissionAndSubcription()
+    // handleDetectMessage(message)
+  }, [receiveSmsPermission, isModelLoaded]);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
@@ -414,12 +435,12 @@ const App = () => {
           Listen to incoming SMS from React Native App
           using React Native Bridge
         </Text>
-        {/* <Text>
+        <Text style={styles.textMessage}>
           SMS received: {message}
         </Text>
         <Text>
           Spam message: {spam}
-        </Text> */}
+        </Text>
       </View>
     </SafeAreaView>
   );
@@ -431,6 +452,11 @@ const styles = StyleSheet.create({
   },
   titleText: {
 
+  },
+  textMessage: {
+    width: 'auto',
+    minWidth: 300,
+    backgroundColor: 'red'
   }
 })
 export default App;
