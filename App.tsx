@@ -221,7 +221,7 @@ const App = () => {
       console.log("File trainDataArray exists and start reading file...");
       const response = await RNFS.readFile(path);
       const convertResponse = JSON.parse(response);
-      console.log("File read successfully:" + convertResponse);
+      // console.log("File read successfully:" + convertResponse);
       return convertResponse
       // setTrainDataSetArray(convertResponse);
       // console.log(trainDataSetArray);
@@ -322,7 +322,7 @@ const App = () => {
   }
 
   async function trainKnnModel(trainData: any) {
-    convertWordToVec(trainData)
+    // convertWordToVec(trainData)
     const dataRead = await readTrainData();
     const labelRead = await readTrainLabel();
     // Check if both files were read successfully before proceeding
@@ -330,11 +330,10 @@ const App = () => {
       console.log('Failed to read training data or labels. Aborting model creation.');
       return;
     }
-    // console.log(dataRead);
-    console.log(labelRead);
+
     try {
       // console.log(trainDataSetArray);
-      const KNN_model = new KNN(dataRead, labelRead, { k: 1 });
+      const KNN_model = new KNN(dataRead, labelRead, { k: 2 });
       await saveKNN_JSON(KNN_model);
       await readKNN_JSON()
     } catch (error) {
@@ -347,16 +346,17 @@ const App = () => {
   const [spam, setSpam] = useState('')
 
 
-  useEffect(() => {
-    const getModel = async () => {
-      await readKNN_JSON();
-      setIsModelLoaded(true); // Set model loaded state after reading the model
-    };
-  
-    if (KNN_JSON_MODEL_Data.length === 0) {
-      getModel();
-    }
-  }, [KNN_JSON_MODEL_Data]);
+  // useEffect(() => {
+  //   // trainKnnModel(trainData)
+  //   const getModel = async () => {
+  //     await readKNN_JSON();
+  //     setIsModelLoaded(true); // Set model loaded state after reading the model
+  //   };
+
+  //   if (KNN_JSON_MODEL_Data.length === 0) {
+  //     getModel();
+  //   }
+  // }, [KNN_JSON_MODEL_Data]);
 
   // useEffect(() => {
   //   const getModel = async () => {
@@ -415,9 +415,73 @@ const App = () => {
     }
   }
 
-  const predictMessage = (message:any) => {
+  const testModel = () => {
+    // let result_expect = []
+    // let result_actual = []
+    // for (let i = 0; i < testData.length; i++) {
+    //   var testDataTest = convertTestToDetect(testData[i].text)
+    //   var ans = KNN_JSON_MODEL_Data.predict(testDataTest)
+    //   result_actual.push(ans)
+
+    // }
+    // console.log(result_actual);
+
+    const result_test_expect = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    const result_test_actual = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0]
+
+    let spam_num_expect = 0
+    let spam_num_actual = 0;
+    let ham_num_expect = 0;
+    let ham_num_actual = 0;
+    let true_positive = 0;
+    let false_positive = 0;
+    let false_negative = 0;
+    let true_negative = 0;
+    for (let i = 0; i < result_test_expect.length; i++) {
+      if (result_test_expect[i] === 1) {
+        spam_num_expect++;
+      }
+      if (result_test_actual[i] === 1) {
+        spam_num_actual++
+      }
+      if (result_test_expect[i] === 0) {
+        ham_num_expect++;
+      }
+      if (result_test_actual[i] === 0) {
+        ham_num_actual++
+      }
+    }
+    for (let i = 0; i < result_test_expect.length; i++) {
+      if (result_test_expect[i] === 1 && result_test_actual[i] === 1) {
+        true_positive++;
+      }
+      if (result_test_expect[i] === 1 && result_test_actual[i] === 0) {
+        false_positive++
+      }
+      if (result_test_expect[i] === 0 && result_test_actual[i] === 1) {
+        false_negative++;
+      }
+      if (result_test_expect[i] === 0 && result_test_actual[i] === 0) {
+        true_negative++;
+      }
+    }
+
+    console.log("Number of spam expect: " + spam_num_expect);
+    console.log("Number of spam actual: " + spam_num_actual);
+    console.log("Number of ham expect: " + ham_num_expect);
+    console.log("Number of am expect: " + ham_num_actual);
+    var precision = ((true_positive) / (true_positive + true_negative))
+    var recall = ((true_positive) / (true_positive + false_negative))
+
+    console.log("Accuracy of model: " + ((true_positive + true_negative) / result_test_expect.length).toFixed(2) + "%");
+    console.log("Precision of model: " + precision.toFixed(2) + "%");
+    console.log("Recall of model: " + recall.toFixed(2) + "%");
+    console.log("F1-score of model: " + (2 * ((precision * recall) / (precision + recall))).toFixed(2) + "%");
+  }
+
+  const predictMessage = (message: any) => {
     const test_dataset = convertTestToDetect(message);
-  
+
     console.log("Predict message: " + message);
     const ans_actual = KNN_JSON_MODEL_Data.predict(test_dataset);
     console.log("Result actual: " + ans_actual);
@@ -425,6 +489,7 @@ const App = () => {
   };
 
   useEffect(() => {
+    testModel()
     handleSmsPermissionAndSubcription()
     // handleDetectMessage(message)
   }, [receiveSmsPermission, isModelLoaded]);
