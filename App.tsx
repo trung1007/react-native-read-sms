@@ -18,6 +18,7 @@ const App = () => {
   const [trainDataSetArray, setTrainDataSetArray] = useState([])
   const [trainDataLabelArray, setTrainDataLabelArray] = useState([])
 
+
   const dictionaryW2V = require('./assets/data/dataset_new_vector_wav2vec.json')
   const test = require('./assets/data/test.json')
   const trainData = require('./assets/data/trainData.json')
@@ -221,6 +222,8 @@ const App = () => {
       console.log("File trainDataArray exists and start reading file...");
       const response = await RNFS.readFile(path);
       const convertResponse = JSON.parse(response);
+      console.log(convertResponse);
+      
       // console.log("File read successfully:" + convertResponse);
       return convertResponse
       // setTrainDataSetArray(convertResponse);
@@ -346,7 +349,20 @@ const App = () => {
   const [spam, setSpam] = useState('')
 
 
+useEffect(()=>{
+  const fetchData = async () => {
+    const data = await readTrainData();
+    if (data) {
+      setTrainDataSetArray(data); // Store data in state
+      console.log(trainDataSetArray); 
+    }
+  };
+
+  fetchData();
+},[])
+
   // useEffect(() => {
+  //   // readTrainData()
   //   // trainKnnModel(trainData)
   //   const getModel = async () => {
   //     await readKNN_JSON();
@@ -358,141 +374,141 @@ const App = () => {
   //   }
   // }, [KNN_JSON_MODEL_Data]);
 
+  // // useEffect(() => {
+  // //   const getModel = async () => {
+  // //     await readKNN_JSON()
+  // //   }
+  // //   if (KNN_JSON_MODEL_Data.length === 0) {
+  // //     getModel()
+  // //   }
+  // //   else {
+  // //     var test_mess = "quay video để làm căn cứ xét duyệt khoản vay"
+  // //     console.log(message)
+  // //     var test_dataset = convertTestToDetect(test_mess)
+  // //     var test_dataset1 = convertTestToDetect(message)
+
+  // //     console.log("predict message expect: " + test_mess);
+  // //     console.log("predict message actual: " + message);
+
+  // //     var ans_expect = KNN_JSON_MODEL_Data.predict(test_dataset)
+  // //     var ans_actual = KNN_JSON_MODEL_Data.predict(test_dataset1)
+
+  // //     console.log("result expect: " + ans_expect);
+  // //     console.log("result actual: " + ans_actual);
+
+  // //     setSpam(ans_actual)
+  // //   }
+  // // }, [KNN_JSON_MODEL_Data])
+
+  // const handleSmsPermissionAndSubcription = async () => {
+  //   try {
+  //     const permission = await PermissionsAndroid
+  //       .request(PermissionsAndroid.PERMISSIONS.RECEIVE_SMS);
+  //     setReceiveSmsPermission(permission);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  //   if (receiveSmsPermission === PermissionsAndroid.RESULTS.GRANTED) {
+  //     let subscriber = DeviceEventEmitter.addListener(
+  //       'onSMSReceived',
+  //       message => {
+  //         const { messageBody, senderPhoneNumber } = JSON.parse(message);
+  //         setMessage(messageBody)
+  //         // console.log(messageBody);
+  //         // Alert.alert(
+  //         //   'SMS received',
+  //         //   `Message Body: ${messageBody} & sender number: ${senderPhoneNumber}`,
+  //         // );
+  //         if (isModelLoaded) {
+  //           predictMessage(messageBody);
+  //         }
+  //       },
+  //     );
+
+  //     return () => {
+  //       subscriber.remove();
+  //     };
+  //   }
+  // }
+
+  // const testModel = () => {
+  //   // let result_expect = []
+  //   // let result_actual = []
+  //   // for (let i = 0; i < testData.length; i++) {
+  //   //   var testDataTest = convertTestToDetect(testData[i].text)
+  //   //   var ans = KNN_JSON_MODEL_Data.predict(testDataTest)
+  //   //   result_actual.push(ans)
+
+  //   // }
+  //   // console.log(result_actual);
+
+  //   // const result_test_expect = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  //   // const result_test_actual = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0]
+
+  //   // let spam_num_expect = 0
+  //   // let spam_num_actual = 0;
+  //   // let ham_num_expect = 0;
+  //   // let ham_num_actual = 0;
+  //   // let true_positive = 0;
+  //   // let false_positive = 0;
+  //   // let false_negative = 0;
+  //   // let true_negative = 0;
+  //   // for (let i = 0; i < result_test_expect.length; i++) {
+  //   //   if (result_test_expect[i] === 1) {
+  //   //     spam_num_expect++;
+  //   //   }
+  //   //   if (result_test_actual[i] === 1) {
+  //   //     spam_num_actual++
+  //   //   }
+  //   //   if (result_test_expect[i] === 0) {
+  //   //     ham_num_expect++;
+  //   //   }
+  //   //   if (result_test_actual[i] === 0) {
+  //   //     ham_num_actual++
+  //   //   }
+  //   // }
+  //   // for (let i = 0; i < result_test_expect.length; i++) {
+  //   //   if (result_test_expect[i] === 1 && result_test_actual[i] === 1) {
+  //   //     true_positive++;
+  //   //   }
+  //   //   if (result_test_expect[i] === 1 && result_test_actual[i] === 0) {
+  //   //     false_positive++
+  //   //   }
+  //   //   if (result_test_expect[i] === 0 && result_test_actual[i] === 1) {
+  //   //     false_negative++;
+  //   //   }
+  //   //   if (result_test_expect[i] === 0 && result_test_actual[i] === 0) {
+  //   //     true_negative++;
+  //   //   }
+  //   // }
+
+  //   // console.log("Number of spam expect: " + spam_num_expect);
+  //   // console.log("Number of spam actual: " + spam_num_actual);
+  //   // console.log("Number of ham expect: " + ham_num_expect);
+  //   // console.log("Number of am expect: " + ham_num_actual);
+  //   // var precision = ((true_positive) / (true_positive + true_negative))
+  //   // var recall = ((true_positive) / (true_positive + false_negative))
+
+  //   // console.log("Accuracy of model: " + ((true_positive + true_negative) / result_test_expect.length).toFixed(2) + "%");
+  //   // console.log("Precision of model: " + precision.toFixed(2) + "%");
+  //   // console.log("Recall of model: " + recall.toFixed(2) + "%");
+  //   // console.log("F1-score of model: " + (2 * ((precision * recall) / (precision + recall))).toFixed(2) + "%");
+  // }
+
+  // const predictMessage = (message: any) => {
+  //   const test_dataset = convertTestToDetect(message);
+
+  //   console.log("Predict message: " + message);
+  //   const ans_actual = KNN_JSON_MODEL_Data.predict(test_dataset);
+  //   console.log("Result actual: " + ans_actual);
+  //   setSpam(ans_actual);
+  // };
+
   // useEffect(() => {
-  //   const getModel = async () => {
-  //     await readKNN_JSON()
-  //   }
-  //   if (KNN_JSON_MODEL_Data.length === 0) {
-  //     getModel()
-  //   }
-  //   else {
-  //     var test_mess = "quay video để làm căn cứ xét duyệt khoản vay"
-  //     console.log(message)
-  //     var test_dataset = convertTestToDetect(test_mess)
-  //     var test_dataset1 = convertTestToDetect(message)
-
-  //     console.log("predict message expect: " + test_mess);
-  //     console.log("predict message actual: " + message);
-
-  //     var ans_expect = KNN_JSON_MODEL_Data.predict(test_dataset)
-  //     var ans_actual = KNN_JSON_MODEL_Data.predict(test_dataset1)
-
-  //     console.log("result expect: " + ans_expect);
-  //     console.log("result actual: " + ans_actual);
-
-  //     setSpam(ans_actual)
-  //   }
-  // }, [KNN_JSON_MODEL_Data])
-
-  const handleSmsPermissionAndSubcription = async () => {
-    try {
-      const permission = await PermissionsAndroid
-        .request(PermissionsAndroid.PERMISSIONS.RECEIVE_SMS);
-      setReceiveSmsPermission(permission);
-    } catch (err) {
-      console.log(err);
-    }
-    if (receiveSmsPermission === PermissionsAndroid.RESULTS.GRANTED) {
-      let subscriber = DeviceEventEmitter.addListener(
-        'onSMSReceived',
-        message => {
-          const { messageBody, senderPhoneNumber } = JSON.parse(message);
-          setMessage(messageBody)
-          // console.log(messageBody);
-          // Alert.alert(
-          //   'SMS received',
-          //   `Message Body: ${messageBody} & sender number: ${senderPhoneNumber}`,
-          // );
-          if (isModelLoaded) {
-            predictMessage(messageBody);
-          }
-        },
-      );
-
-      return () => {
-        subscriber.remove();
-      };
-    }
-  }
-
-  const testModel = () => {
-    // let result_expect = []
-    // let result_actual = []
-    // for (let i = 0; i < testData.length; i++) {
-    //   var testDataTest = convertTestToDetect(testData[i].text)
-    //   var ans = KNN_JSON_MODEL_Data.predict(testDataTest)
-    //   result_actual.push(ans)
-
-    // }
-    // console.log(result_actual);
-
-    const result_test_expect = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    const result_test_actual = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0]
-
-    let spam_num_expect = 0
-    let spam_num_actual = 0;
-    let ham_num_expect = 0;
-    let ham_num_actual = 0;
-    let true_positive = 0;
-    let false_positive = 0;
-    let false_negative = 0;
-    let true_negative = 0;
-    for (let i = 0; i < result_test_expect.length; i++) {
-      if (result_test_expect[i] === 1) {
-        spam_num_expect++;
-      }
-      if (result_test_actual[i] === 1) {
-        spam_num_actual++
-      }
-      if (result_test_expect[i] === 0) {
-        ham_num_expect++;
-      }
-      if (result_test_actual[i] === 0) {
-        ham_num_actual++
-      }
-    }
-    for (let i = 0; i < result_test_expect.length; i++) {
-      if (result_test_expect[i] === 1 && result_test_actual[i] === 1) {
-        true_positive++;
-      }
-      if (result_test_expect[i] === 1 && result_test_actual[i] === 0) {
-        false_positive++
-      }
-      if (result_test_expect[i] === 0 && result_test_actual[i] === 1) {
-        false_negative++;
-      }
-      if (result_test_expect[i] === 0 && result_test_actual[i] === 0) {
-        true_negative++;
-      }
-    }
-
-    console.log("Number of spam expect: " + spam_num_expect);
-    console.log("Number of spam actual: " + spam_num_actual);
-    console.log("Number of ham expect: " + ham_num_expect);
-    console.log("Number of am expect: " + ham_num_actual);
-    var precision = ((true_positive) / (true_positive + true_negative))
-    var recall = ((true_positive) / (true_positive + false_negative))
-
-    console.log("Accuracy of model: " + ((true_positive + true_negative) / result_test_expect.length).toFixed(2) + "%");
-    console.log("Precision of model: " + precision.toFixed(2) + "%");
-    console.log("Recall of model: " + recall.toFixed(2) + "%");
-    console.log("F1-score of model: " + (2 * ((precision * recall) / (precision + recall))).toFixed(2) + "%");
-  }
-
-  const predictMessage = (message: any) => {
-    const test_dataset = convertTestToDetect(message);
-
-    console.log("Predict message: " + message);
-    const ans_actual = KNN_JSON_MODEL_Data.predict(test_dataset);
-    console.log("Result actual: " + ans_actual);
-    setSpam(ans_actual);
-  };
-
-  useEffect(() => {
-    testModel()
-    handleSmsPermissionAndSubcription()
-    // handleDetectMessage(message)
-  }, [receiveSmsPermission, isModelLoaded]);
+  //   testModel()
+  //   handleSmsPermissionAndSubcription()
+  //   // handleDetectMessage(message)
+  // }, [receiveSmsPermission, isModelLoaded]);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
@@ -500,12 +516,13 @@ const App = () => {
           Listen to incoming SMS from React Native App
           using React Native Bridge
         </Text>
-        <Text style={styles.textMessage}>
+        {/* <Text style={styles.textMessage}>
           SMS received: {message}
         </Text>
         <Text>
           Spam message: {spam}
-        </Text>
+        </Text> */}
+        <Text>Data Loaded: {JSON.stringify(trainDataSetArray)}</Text>
       </View>
     </SafeAreaView>
   );
