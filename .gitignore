@@ -34,6 +34,13 @@ local.properties
 *.keystore
 !debug.keystore
 
+# data
+assets/trainData
+assets/testData
+assets/prediction
+assets/model
+
+
 # node.js
 #
 node_modules/
