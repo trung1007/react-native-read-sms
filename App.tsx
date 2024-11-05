@@ -24,8 +24,6 @@ const App = () => {
   const knn_model = KNN.load(KnnModelSaved);
 
   useEffect(() => {
-    console.log(typeof vectorizedDocument);
-    
     if (vectorizedDocument.length > 0) {
       const prediction = knn_model.predict(vectorizedDocument);
       console.log(prediction);

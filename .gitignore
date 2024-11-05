@@ -38,7 +38,6 @@ local.properties
 assets/trainData
 assets/testData
 assets/prediction
-assets/model
 
 
 # node.js
