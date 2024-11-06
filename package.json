@@ -13,7 +13,8 @@
     "ml-knn": "^3.0.0",
     "react": "18.3.1",
     "react-native": "0.75.4",
-    "react-native-fs": "^2.20.0"
+    "react-native-fs": "^2.20.0",
+    "react-native-voice": "^0.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

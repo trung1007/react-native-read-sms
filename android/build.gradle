@@ -11,8 +11,13 @@ buildscript {
         google()
         mavenCentral()
     }
+     tasks.withType(JavaCompile) {
+        options.fork = true
+        options.forkOptions.executable = "path/to/javac"  // Set path to Java 8
+    }
     dependencies {
-        classpath("com.android.tools.build:gradle")
+        // classpath("com.android.tools.build:gradle")
+        classpath('com.android.tools.build:gradle:7.0.4') 
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
     }

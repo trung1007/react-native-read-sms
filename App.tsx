@@ -12,6 +12,7 @@ import {
 import RNFS from 'react-native-fs';
 import useSmsPermission from './hook/useSmsPermision';
 import useVectorized from './hook/useVectorized';
+import VoiceRecord from './src/voiceRecord';
 
 const App = () => {
   const {receiveSmsPermission, receivedSmsMessage, receivedSmsPhoneNumber} =
@@ -35,6 +36,9 @@ const App = () => {
       <Text>Permission Status: {receiveSmsPermission}</Text>
       <Text>Sender Phone Number: {receivedSmsPhoneNumber}</Text>
       <Text>Received SMS: {receivedSmsMessage}</Text>
+      <View>
+        <VoiceRecord/>
+      </View>
     </SafeAreaView>
   );
 };

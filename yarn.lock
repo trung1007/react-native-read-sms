@@ -7778,6 +7778,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-voice@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "react-native-voice@npm:0.3.0"
+  peerDependencies:
+    react-native: ">=0.40.0"
+  checksum: 3a8824d0afa69b81c5eba1ec003a25df8c55fa8b8f56a5bd489a802f1f1c1d74578bab424acbdbb0d9a5aa2dd05fda5aebfab245652ad8a900665f795e562692
+  languageName: node
+  linkType: hard
+
 "react-native@npm:0.75.4":
   version: 0.75.4
   resolution: "react-native@npm:0.75.4"
@@ -7895,6 +7904,7 @@ __metadata:
     react: 18.3.1
     react-native: 0.75.4
     react-native-fs: ^2.20.0
+    react-native-voice: ^0.3.0
     react-test-renderer: 18.3.1
     typescript: 5.0.4
   languageName: unknown
