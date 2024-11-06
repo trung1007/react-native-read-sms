@@ -8,6 +8,7 @@ import {
   Alert,
   DeviceEventEmitter,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import RNFS from 'react-native-fs';
 import useSmsPermission from './hook/useSmsPermision';
@@ -17,18 +18,42 @@ const App = () => {
   const {receiveSmsPermission, receivedSmsMessage, receivedSmsPhoneNumber} =
     useSmsPermission();
 
-  const {vectorizedDocument} = useVectorized(receivedSmsMessage);
-
-  const KNN = require('ml-knn');
-  const KnnModelSaved = require('./assets/model/savedKnnModel.json');
-  const knn_model = KNN.load(KnnModelSaved);
-
-  useEffect(() => {
-    if (vectorizedDocument.length > 0) {
-      const prediction = knn_model.predict(vectorizedDocument);
-      console.log(prediction);
+    async function checkNotificationPermission(){
+      
+      if (Platform.OS !== 'android') {
+        console.warn('This permission check is only applicable for Android.');
+        return true;
+      }
+      if(Platform.OS === 'android'){
+        try {
+          const notfiGranted = await PermissionsAndroid.check(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+          )
+          const notiRequest = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+          )
+          console.log(notfiGranted);
+          console.log(notiRequest);
+          
+          if(!notfiGranted){
+            const notiRequest = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+            )
+            return notiRequest===PermissionsAndroid.RESULTS.GRANTED
+          }
+          console.log(notfiGranted);
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
     }
-  }, [vectorizedDocument]);
+
+    useEffect(()=>{
+      checkNotificationPermission()
+    },[])
+  
 
   return (
     <SafeAreaView style={styles.container}>
