@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+apply plugin: "com.google.gms.google-services"
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -113,6 +114,8 @@ dependencies {
     implementation project(':react-native-fs')
     // implementation project(':react-native-voice')// Add this line
     implementation project(':react-native-voice_voice')
+    implementation project(':react-native-push-notification')
+    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {

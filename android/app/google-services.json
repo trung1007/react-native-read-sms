@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "221384608225",
+    "project_id": "react-native-notificatio-351b9",
+    "storage_bucket": "react-native-notificatio-351b9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221384608225:android:ebdbefc5b0b2acf7512aa0",
+        "android_client_info": {
+          "package_name": "com.react_native_read_sms"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASk-imu63Uo8D8rMWIKm5j_fP6M2vxwqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221384608225:android:fb3708cc63536636512aa0",
+        "android_client_info": {
+          "package_name": "com.reactnativenotification"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASk-imu63Uo8D8rMWIKm5j_fP6M2vxwqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
