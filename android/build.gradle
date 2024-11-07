@@ -11,11 +11,40 @@ buildscript {
         google()
         mavenCentral()
     }
+     tasks.withType(JavaCompile) {
+        options.fork = true
+        options.forkOptions.executable = "path/to/javac"  // Set path to Java 8
+    }
     dependencies {
-        classpath("com.android.tools.build:gradle")
+        // classpath("com.android.tools.build:gradle")
+        classpath('com.android.tools.build:gradle:7.0.4') 
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
     }
 }
+
+subprojects {
+    afterEvaluate { project ->
+        if (project.name.contains("react-native-voice_voice")) {
+            def generateResTask = project.tasks.findByName("generateDebugResValues")
+            def packageResourcesTask = project.tasks.findByName("packageDebugResources")
+            def extractDeepLinksTask = project.tasks.findByName("extractDeepLinksDebug")
+            
+            if (packageResourcesTask && generateResTask) {
+                // Solution 2: Explicit dependency with dependsOn
+                packageResourcesTask.dependsOn generateResTask
+                
+                // Solution 3: Ensure task order with mustRunAfter
+                packageResourcesTask.mustRunAfter generateResTask
+            }
+            
+            if (extractDeepLinksTask && generateResTask) {
+                // Ensure extractDeepLinksDebug also runs after generateDebugResValues
+                extractDeepLinksTask.mustRunAfter generateResTask
+            }
+        }
+    }
+}
+
 
 apply plugin: "com.facebook.react.rootproject"

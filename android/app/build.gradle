@@ -70,7 +70,7 @@ def enableProguardInReleaseBuilds = false
  * give correct results when using with locales other than en-US. Note that
  * this variant is about 6MiB larger per architecture than default.
  */
-def jscFlavor = 'org.webkit:android-jsc:+'
+def jscFlavor = 'org.webkit:android-jsc-intl:+' // Use international variant for better i18n support
 
 android {
     ndkVersion rootProject.ext.ndkVersion
@@ -110,7 +110,9 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
- implementation project(':react-native-fs')
+    implementation project(':react-native-fs')
+    // implementation project(':react-native-voice')// Add this line
+    implementation project(':react-native-voice_voice')
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {

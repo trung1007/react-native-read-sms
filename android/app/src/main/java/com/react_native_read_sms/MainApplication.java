@@ -13,6 +13,7 @@ import com.facebook.react.ReactNativeHost; // Import ReactNativeHost
 import com.facebook.react.ReactApplication; // Import ReactApplication
 import com.react_native_read_sms.SmsListenerPackage; // Import your custom package
 import com.rnfs.RNFSPackage; // <------- add package
+import com.wenkesj.voice.VoicePackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -28,7 +29,8 @@ public class MainApplication extends Application implements ReactApplication {
             return Arrays.<ReactPackage>asList(
                 new MainReactPackage(), // Include the main React package
                 new SmsListenerPackage(), // Add your custom package
-                new RNFSPackage()
+                new RNFSPackage(),
+                new VoicePackage()
             );
         }
 
