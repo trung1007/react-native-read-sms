@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, PermissionsAndroid, ToastAndroid, Platform } from "react-native";
-import Voice from 'react-native-voice';
+import Voice from '@react-native-voice/voice';
 
 const VoiceRecord = () => {
     const [isRecording, setIsRecording] = useState(false);
@@ -27,6 +27,8 @@ const VoiceRecord = () => {
     // Start recording
     const startRecording = async () => {
       const permissionGranted = await requestPermission();
+      console.log(permissionGranted);
+      
       if (permissionGranted) {
         setIsRecording(true);
         Voice.start('vi-VN'); // Start the voice recognition
