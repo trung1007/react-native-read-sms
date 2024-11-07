@@ -9,11 +9,13 @@ import {
   DeviceEventEmitter,
   StyleSheet,
   Platform,
+  Button,
 } from 'react-native';
 import RNFS from 'react-native-fs';
 import useSmsPermission from './hook/useSmsPermision';
 import useVectorized from './hook/useVectorized';
 import VoiceRecord from './src/voiceRecord';
+import LocalNotification from './LocalNotification';
 
 const App = () => {
   const {receiveSmsPermission, receivedSmsMessage, receivedSmsPhoneNumber} =
@@ -64,6 +66,8 @@ const App = () => {
       <View>
         <VoiceRecord/>
       </View>
+      <Text> Push Notification!! </Text>
+      <Button title={'Click Here'} onPress={LocalNotification} />
     </SafeAreaView>
   );
 };
