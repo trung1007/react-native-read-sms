@@ -7975,6 +7975,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-push-notification@npm:^8.1.1":
+  version: 8.1.1
+  resolution: "react-native-push-notification@npm:8.1.1"
+  peerDependencies:
+    "@react-native-community/push-notification-ios": ^1.10.1
+    react-native: ">=0.33"
+  checksum: 64d500c1163eaa4eee549e6e2f8204cac643f91ae918a227e9d93f8261afdebbdaa7ba5d12da0039155cbf6a599032dd15be4ebe53737cbeeadec4469893f00d
+  languageName: node
+  linkType: hard
+
 "react-native@npm:0.75.4":
   version: 0.75.4
   resolution: "react-native@npm:0.75.4"
@@ -8093,6 +8103,7 @@ __metadata:
     react: 18.3.1
     react-native: 0.75.4
     react-native-fs: ^2.20.0
+    react-native-push-notification: ^8.1.1
     react-test-renderer: 18.3.1
     typescript: 5.0.4
   languageName: unknown
