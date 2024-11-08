@@ -16,6 +16,7 @@ import useSmsPermission from './hook/useSmsPermision';
 import useVectorized from './hook/useVectorized';
 import VoiceRecord from './src/voiceRecord';
 import LocalNotification from './LocalNotification';
+import BackgroundTask from './src/backgroundTask';
 
 const App = () => {
   const {receiveSmsPermission, receivedSmsMessage, receivedSmsPhoneNumber} =
@@ -56,6 +57,17 @@ const App = () => {
     useEffect(()=>{
       checkNotificationPermission()
     },[])
+
+    const startBackgroundTask = () => {
+      console.log('Background task started');
+      // LocalNotification()
+      // receivedSmsMessage && console.log(receivedSmsMessage);
+    
+    };
+  
+    const stopBackgroundTask = () => {
+      console.log('Background task stopped');
+    };
   
 
   return (
@@ -68,6 +80,7 @@ const App = () => {
       </View>
       <Text> Push Notification!! </Text>
       <Button title={'Click Here'} onPress={LocalNotification} />
+      <BackgroundTask onStartTask={startBackgroundTask} onStopTask={stopBackgroundTask} />
     </SafeAreaView>
   );
 };
