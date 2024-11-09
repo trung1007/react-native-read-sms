@@ -47,9 +47,13 @@ const stopBackgroundService = async () => {
 const MyService = () => {
     const state = useAppStateContext()
     useEffect(() => {
-
         console.log(state);
-        // console.log(testState);
+        if (state === 'background') {
+            startBackgroundService()
+        }
+        if (state === 'active') {
+            stopBackgroundService()
+        }
     }, [state])
     return (
         <View style={{ flex: 1 }}>
@@ -63,9 +67,6 @@ const MyService = () => {
                 alignItems: 'center',
                 alignSelf: 'center'
             }}
-                onPress={() => {
-                    startBackgroundService()
-                }}
             >
                 <Text style={{ color: '#ffff' }}>Start Background Service</Text>
             </TouchableOpacity>
@@ -79,9 +80,6 @@ const MyService = () => {
                 alignItems: 'center',
                 alignSelf: 'center'
             }}
-                onPress={() => {
-                    stopBackgroundService()
-                }}
             >
                 <Text style={{ color: '#ffff' }}>End Foreground Service</Text>
             </TouchableOpacity>

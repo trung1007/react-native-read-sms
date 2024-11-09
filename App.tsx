@@ -17,8 +17,8 @@ const App = () => {
     <AppStateProvider>
     {/* // <appStateContext.Provider value={inApp ? 'active' : 'background'}> */}
         <SafeAreaView style={styles.container}>
-          {/* <MyService /> */}
-          <TestState/>
+          <MyService />
+          {/* <TestState/> */}
         </SafeAreaView >
     {/* // </appStateContext.Provider> */}
 
