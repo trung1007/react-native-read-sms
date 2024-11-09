@@ -21,6 +21,7 @@ import VoiceRecord from './src/voiceRecord';
 import LocalNotification from './LocalNotification';
 // import BackgroundTask from './src/backgroundTask';
 // import BackgroundService from 'react-native-background-actions';
+import MyService from './src/service/Service';
 
 
 
@@ -52,7 +53,7 @@ const App = () => {
   // }, []);
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Permission Status: {receiveSmsPermission}</Text>
+      {/* <Text>Permission Status: {receiveSmsPermission}</Text>
       <Text>Sender Phone Number: {receivedSmsPhoneNumber}</Text>
       <Text>Received SMS: {receivedSmsMessage}</Text>
       <View>
@@ -61,14 +62,19 @@ const App = () => {
       <Text> Push Notification!! </Text>
       <Button title={'Click Here'} onPress={()=>{
         LocalNotification('123123')
-      }} />
+      }} /> */}
+      <MyService/>
       
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex:1,
+    // justifyContent:'center',
+    // alignItems:'center'
+  },
   titleText: {},
   textMessage: {
     width: 'auto',
