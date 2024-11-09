@@ -1,6 +1,9 @@
-import { TouchableOpacity, View, Text } from "react-native"
+import { TouchableOpacity, View, Text, AppState } from "react-native"
 import { useEffect } from "react";
 import BackgroundService from 'react-native-background-actions';
+import { AppStateProvider, useAppStateContext } from "../../context/AppStateContext";
+
+
 
 const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
 const veryIntensiveTask = async (taskDataArguments) => {
@@ -40,8 +43,14 @@ const startBackgroundService = async () => {
 const stopBackgroundService = async () => {
     await BackgroundService.stop();
 }
-const MyService = () => {
 
+const MyService = () => {
+    const state = useAppStateContext()
+    useEffect(() => {
+
+        console.log(state);
+        // console.log(testState);
+    }, [state])
     return (
         <View style={{ flex: 1 }}>
             <TouchableOpacity style={{
@@ -53,34 +62,10 @@ const MyService = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 alignSelf: 'center'
-            }}>
-                <Text style={{ color: '#ffff' }}>Start Foreground Service</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{
-                width: '80%',
-                height: 50,
-                marginTop: 20,
-                borderRadius: 20,
-                backgroundColor: 'red',
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignSelf: 'center'
-            }}>
-                <Text style={{ color: '#ffff' }}>End Foreground Service</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{
-                width: '80%',
-                height: 50,
-                marginTop: 100,
-                borderRadius: 20,
-                backgroundColor: 'green',
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignSelf: 'center'
             }}
-            onPress={()=>{
-                startBackgroundService()
-            }}
+                onPress={() => {
+                    startBackgroundService()
+                }}
             >
                 <Text style={{ color: '#ffff' }}>Start Background Service</Text>
             </TouchableOpacity>
@@ -94,9 +79,9 @@ const MyService = () => {
                 alignItems: 'center',
                 alignSelf: 'center'
             }}
-            onPress={()=>{
-                stopBackgroundService()
-            }}
+                onPress={() => {
+                    stopBackgroundService()
+                }}
             >
                 <Text style={{ color: '#ffff' }}>End Foreground Service</Text>
             </TouchableOpacity>
