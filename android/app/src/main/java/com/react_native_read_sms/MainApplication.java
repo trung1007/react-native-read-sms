@@ -15,6 +15,8 @@ import com.react_native_read_sms.SmsListenerPackage; // Import your custom packa
 import com.rnfs.RNFSPackage; // <------- add package
 import com.wenkesj.voice.VoicePackage; // add VoicePackage
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage; // add NotificationPackage
+import com.asterinet.react.bgactions.BackgroundActionsPackage;
+// import com.voximplant.foregroundservice.VIForegroundServicePackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -32,7 +34,9 @@ public class MainApplication extends Application implements ReactApplication {
                 new SmsListenerPackage(), // Add your custom package
                 new RNFSPackage(),
                 new VoicePackage(),
-                new ReactNativePushNotificationPackage()
+                new ReactNativePushNotificationPackage(),
+                new BackgroundActionsPackage()
+                // new VIForegroundServicePackage()
             );
         }
 

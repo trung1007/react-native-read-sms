@@ -1,6 +1,8 @@
 import PushNotification from 'react-native-push-notification'
 
-const LocalNotification = () => {
+const LocalNotification = (spamMessage) => {
+    console.log(spamMessage);
+    
     const key = Date.now().toString(); // Key must be unique everytime
     PushNotification.createChannel(
         {
@@ -14,8 +16,8 @@ const LocalNotification = () => {
     );
     PushNotification.localNotification({
         channelId: key, //this must be same with channelid in createchannel
-        title: 'Local Message',
-        message: 'Local message !!' + key,
+        title: 'Cảnh báo tin nhắn độc hại',
+        message: (spamMessage + key) || ('Local message' + key),
         priority: "max",
     })
 };

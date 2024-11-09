@@ -4702,6 +4702,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eventemitter3@npm:^4.0.7":
+  version: 4.0.7
+  resolution: "eventemitter3@npm:4.0.7"
+  checksum: 1875311c42fcfe9c707b2712c32664a245629b42bb0a5a84439762dd0fd637fc54d078155ea83c2af9e0323c9ac13687e03cfba79b03af9f40c89b4960099374
+  languageName: node
+  linkType: hard
+
 "execa@npm:^5.0.0, execa@npm:^5.1.1":
   version: 5.1.1
   resolution: "execa@npm:5.1.1"
@@ -7959,6 +7966,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-background-actions@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "react-native-background-actions@npm:4.0.1"
+  dependencies:
+    eventemitter3: ^4.0.7
+  peerDependencies:
+    react-native: ">=0.47.0"
+  checksum: 101cf491a3d0f40abb1189238d6911f544a69cc14b13734dac485600a1cd013d2c452a75d13579a66104ad43e4998bb8b927b982d7ff5c6e0074329e2eae1738
+  languageName: node
+  linkType: hard
+
 "react-native-fs@npm:^2.20.0":
   version: 2.20.0
   resolution: "react-native-fs@npm:2.20.0"
@@ -8102,6 +8120,7 @@ __metadata:
     prettier: 2.8.8
     react: 18.3.1
     react-native: 0.75.4
+    react-native-background-actions: ^4.0.1
     react-native-fs: ^2.20.0
     react-native-push-notification: ^8.1.1
     react-test-renderer: 18.3.1
