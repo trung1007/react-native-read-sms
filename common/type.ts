@@ -16,3 +16,7 @@ export interface SMSMessage {
   thread_id?: number;
   type: number;
 }
+
+export interface SpamLabel{
+    spam?:boolean
+}

@@ -9,34 +9,15 @@ import MyService from './src/service/Service';
 import { AppStateProvider } from './context/AppStateContext';
 import { MessageProvider } from './context/MessageContext';
 import TestState from './src/testState';
-// @ts-ignore
-import { fetchSMSMessages } from './hook/useSMS';
-
-
+import Layout from './src/screens/_layout';
 
 const App = () => {
-  // const [message, setMessage] = useState('')
-  // const getMessages = async () => {
-  //   try {
-  //     const messages = await fetchSMSMessages({ read: 0, maxCount: 1 });
-  //     messages.forEach((message) => {
-  //       setMessage(message.body)
-  //   });
-  //   } catch (error) {
-  //     console.error('Error fetching SMS:', error);
-  //   }
-  // };
-
-
-  // useEffect(() => {
-  //   getMessages()
-  //   console.log(message);
-  // }, [message])
   return (
     <AppStateProvider>
       <MessageProvider>
         <SafeAreaView style={styles.container}>
-          <MyService />
+          <Layout />
+          {/* <MyService /> */}
           {/* <TestState/> */}
         </SafeAreaView >
       </MessageProvider>
