@@ -51,12 +51,12 @@ export const fetchSMSMessages = async (filterOptions = {}): Promise<SMSMessage[]
     SmsAndroid.list(
       JSON.stringify(options),
       (fail: any) => {
-        console.error('Failed to fetch SMS:', fail);
+        // console.error('Failed to fetch SMS:', fail);
         reject(fail);
       },
       (count: any, smsList: any) => {
         const messages = JSON.parse(smsList);
-        console.log(`Fetched ${count} SMS messages`, messages);
+        // console.log(`Fetched ${count} SMS messages`, messages);
         resolve(messages);
       },
     );

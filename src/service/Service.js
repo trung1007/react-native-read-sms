@@ -7,6 +7,7 @@ import { useMessageContext } from "../../context/MessageContext";
 import SmsAndroid from 'react-native-get-sms-android';
 import LocalNotification from "../../LocalNotification";
 import { fetchSMSMessages } from "../../hook/useSMS";
+import { detectSpam } from "../../utils/detectSpam";
 
 const MyService = () => {
     const state = useAppStateContext()
@@ -22,7 +23,10 @@ const MyService = () => {
                 try {
                     const messages = await fetchSMSMessages({ read: 0, maxCount: 1 });
                     messages.forEach((message) => {
-                        console.log('Message body:', message.body);
+                        const isSpam = detectSpam(message.body)
+                        if(isSpam){
+                            LocalNotification
+                        }
                     });
                 } catch (error) {
                     console.error('Error fetching SMS:', error);

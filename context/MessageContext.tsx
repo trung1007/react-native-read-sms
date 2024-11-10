@@ -17,7 +17,7 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({ children }) =>
         try {
             const messages = await fetchSMSMessages({ read: 0, maxCount: 1 })
             messages.forEach((message) => {
-                console.log('Message body:', message.body);
+                // console.log('Message body:', message.body);
                 setSmsMessage(message.body)
             });
         } catch (error) {
