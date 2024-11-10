@@ -13,8 +13,6 @@ interface AppStateProviderProps {
 export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) => {
   const [appState, setAppState] = useState<AppStateStatus>(AppState.currentState);
   const [inApp, setInApp] = useState(true)
-
-
   useEffect(() => {
     const handleAppStateChange = (nextAppState: AppStateStatus) => {
       setAppState(nextAppState);
@@ -47,12 +45,9 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
 
 export const useAppStateContext = () => {
   const context = useContext(AppStateContext);
-  console.log(context);
-  
   if (context === null) {
     throw new Error("useAppStateContext must be used within an AppStateProvider");
   }
-
   return context;
 };
 
