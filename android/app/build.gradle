@@ -116,6 +116,7 @@ dependencies {
     implementation project(':react-native-voice_voice')
     implementation project(':react-native-push-notification')
     implementation project(':react-native-background-actions')
+    implementation project(':react-native-get-sms-android')
     implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

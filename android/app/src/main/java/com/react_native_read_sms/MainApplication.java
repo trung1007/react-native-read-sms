@@ -16,6 +16,7 @@ import com.rnfs.RNFSPackage; // <------- add package
 import com.wenkesj.voice.VoicePackage; // add VoicePackage
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage; // add NotificationPackage
 import com.asterinet.react.bgactions.BackgroundActionsPackage;
+import com.react.SmsPackage;
 // import com.voximplant.foregroundservice.VIForegroundServicePackage;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -35,7 +36,8 @@ public class MainApplication extends Application implements ReactApplication {
                 new RNFSPackage(),
                 new VoicePackage(),
                 new ReactNativePushNotificationPackage(),
-                new BackgroundActionsPackage()
+                new BackgroundActionsPackage(),
+                new SmsPackage()
                 // new VIForegroundServicePackage()
             );
         }

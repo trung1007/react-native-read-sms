@@ -7993,6 +7993,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-get-sms-android@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "react-native-get-sms-android@npm:2.1.0"
+  peerDependencies:
+    react-native: "*"
+  checksum: d74653e0ecac1f391d84305e1f4f56140e2042f7f3a5bb19a5cbf0ba2c77fee605c1b7b8636755390fb53b5c0ca8d50c41c8a7dd643d689e4a08540673608141
+  languageName: node
+  linkType: hard
+
 "react-native-push-notification@npm:^8.1.1":
   version: 8.1.1
   resolution: "react-native-push-notification@npm:8.1.1"
@@ -8122,6 +8131,7 @@ __metadata:
     react-native: 0.75.4
     react-native-background-actions: ^4.0.1
     react-native-fs: ^2.20.0
+    react-native-get-sms-android: ^2.1.0
     react-native-push-notification: ^8.1.1
     react-test-renderer: 18.3.1
     typescript: 5.0.4
