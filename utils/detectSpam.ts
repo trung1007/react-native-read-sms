@@ -1,18 +1,28 @@
 import {SpamLabel} from '../common/type';
 import useVectorized from '../hook/useVectorized';
-export const detectSpam = (message: string): SpamLabel => {
+// @ts-ignore
+import KNN from 'ml-knn';
+import KNN_saved from '../assets/model/savedKnnModel.json';
+const KNN_used = KNN.load(KNN_saved);
+export const detectSpam = async (message: string): Promise<SpamLabel> => {
   let isSpam = false;
-  const KNN = require('ml-knn');
-  const KNN_saved = require('../assets/model/savedKnnModel.json');
-  const KNN_used = KNN.load(KNN_saved);
-  const {vectorizedDocument} = useVectorized(message);
-  const prediction = KNN_used.predict(vectorizedDocument);
-  if (prediction) {
-    isSpam = true;
-  } else {
-    isSpam = false;
+  try {
+    const {vectorizedDocument} = useVectorized(message);
+    // console.log(vectorizedDocument);
+    
+    // Wrap the prediction in a Promise to handle it asynchronously
+    const prediction = await new Promise<boolean>(resolve => {
+      const result = KNN_used.predict(vectorizedDocument);
+      isSpam = result
+      
+      resolve(result === 1 || (Array.isArray(result) && result[0] === 1));
+    });
+    isSpam = prediction
+    
+  } catch (error) {
+    console.error('Error in detecting spam:', error);
+    isSpam = false; // Default to not spam if an error occurs
   }
-  console.log(isSpam);
-  
+  // console.log(isSpam);
   return {spam: isSpam};
 };

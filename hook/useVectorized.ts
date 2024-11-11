@@ -6,9 +6,9 @@ interface useVectorizedResult {
 
 const useVectorized = (document: string | null): useVectorizedResult => {
   const dictionary = require('../assets/dictionary/document_vectors.json');
-  const vectorizedDocument = useMemo(() => {
-    if (typeof document !== 'string') return [];
+  let vectorizedDocument: [] = [];
 
+  if (typeof document === 'string') {
     const wordPerSentence = document.toLowerCase().trim().split(' ');
 
     // Vectorize each word based on the dictionary
@@ -18,13 +18,11 @@ const useVectorized = (document: string | null): useVectorizedResult => {
 
     // Compute the mean vector
     // @ts-ignore
-    const documentArrayMean = documentArray[0].map((_, colIndex) => {
+    vectorizedDocument = documentArray[0].map((_, colIndex) => {
       const sum = documentArray.reduce((acc, row) => acc + row[colIndex], 0);
       return sum / documentArray.length;
     });
-
-    return documentArrayMean;
-  }, [document, dictionary]); // Recalculate only if document changes
+  }
 
   return { vectorizedDocument };
 };

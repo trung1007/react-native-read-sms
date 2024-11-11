@@ -29,13 +29,15 @@ const Layout = () => {
             for (let i = 0; BackgroundService.isRunning(); i++) {
                 try {
                     const messages = await fetchSMSMessages({ read: 0, maxCount: 1 });
-                    // messages.forEach((message) => {
-                    //     console.log('Message body:', message.body);
-                    // });
-                    if (messages && messages[0]) {
+                    // if (messages && messages[0]) {
+                    //     setMessage(messages[0].body)
+                    // }
+                    // console.log(message);
+                    if (message !== messages[0].body) {
                         setMessage(messages[0].body)
                     }
-
+                    // const isSpam = await detectSpam(message)
+                    // console.log(isSpam);
                 } catch (error) {
                     console.error('Error fetching SMS:', error);
                 }
@@ -66,12 +68,26 @@ const Layout = () => {
         await BackgroundService.stop();
     }
     const appState = useAppStateContext()
+    const detectMessage = async (message: string) => {
+        try {
+           const prediction= await detectSpam(message)
+           console.log("prediction in background: "+ prediction.spam);
+           if(prediction.spam){
+            LocalNotification(message)
+           }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     useEffect(() => {
         if (appState === 'background') {
             startBackgroundService()
-            if (detectSpam(message)) {
-                LocalNotification(message)
+            if (message.length > 0) {
+                detectMessage(message)
             }
+            // if (detectSpam(message)) {
+            //     LocalNotification(message)
+            // }
         }
         if (appState === 'active') {
             stopBackgroundService()
