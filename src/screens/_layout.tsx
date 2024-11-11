@@ -7,21 +7,16 @@ import { detectSpam } from "../../utils/detectSpam"
 import BackgroundService from 'react-native-background-actions';
 import { fetchSMSMessages } from "../../hook/useSMS";
 import LocalNotification from "../../LocalNotification"
+import { useMessageContext } from "../../context/MessageContext"
+import usePermission from "../../hook/usePermision"
 
 
 const Layout = () => {
 
     const [message, setMessage] = useState('')
+    const  { receiveSmsPermission, receivedSmsMessage, receivedSmsPhoneNumber, notifcationPermission} = usePermission()
     // @ts-ignore
     const sleep = (time: any) => new Promise((resolve) => setTimeout(() => resolve(), time));
-    // let latestMessage: string = '';
-    // const updateLatestMessage = (message: string) => {
-    //     latestMessage = message;
-    //     console.log('Updated latest message:', latestMessage);
-    //     if (latestMessage !== undefined) {
-    //         return latestMessage
-    //     }
-    // };
     const veryIntensiveTask = async (taskDataArguments: any) => {
         // Example of an infinite loop task
         const { delay } = taskDataArguments;
@@ -47,8 +42,8 @@ const Layout = () => {
     };
     const options = {
         taskName: 'Example',
-        taskTitle: 'ExampleTask title',
-        taskDesc: 'ExampleTask description',
+        taskTitle: 'App',
+        taskDesc: 'App is running in background',
         taskIcon: {
             name: 'ic_launcher',
             type: 'mipmap',
@@ -62,16 +57,17 @@ const Layout = () => {
 
     const startBackgroundService = async () => {
         await BackgroundService.start(veryIntensiveTask, options);
-        await BackgroundService.updateNotification({ taskDesc: 'ExampleTask description' }); // Only Android, iOS will ignore this call
+        // await BackgroundService.updateNotification({ taskDesc: 'ExampleTask description' }); // Only Android, iOS will ignore this call
     }
     const stopBackgroundService = async () => {
         await BackgroundService.stop();
     }
     const appState = useAppStateContext()
-    const detectMessage = async (message: string) => {
+    const detectMessage = async (message: string, appState: string) => {
+        console.log(message);
         try {
            const prediction= await detectSpam(message)
-           console.log("prediction in background: "+ prediction.spam);
+           console.log('prediction in ' + appState + ": " + prediction.spam);
            if(prediction.spam){
             LocalNotification(message)
            }
@@ -83,20 +79,21 @@ const Layout = () => {
         if (appState === 'background') {
             startBackgroundService()
             if (message.length > 0) {
-                detectMessage(message)
+                detectMessage(message, appState)
             }
-            // if (detectSpam(message)) {
-            //     LocalNotification(message)
-            // }
         }
         if (appState === 'active') {
             stopBackgroundService()
+            console.log(receivedSmsMessage);
+            
+            if(receivedSmsMessage !== null){
+                console.log(receivedSmsMessage);
+                if(typeof receivedSmsMessage === 'string'){
+                    detectMessage(receivedSmsMessage, appState)
+                }      
+            }
         }
-
-
-    }, [appState, message])
-    // const isSpam = useMemo(()=>{detectSpam(latestMessage)},[latestMessage])
-
+    }, [appState, message, receivedSmsMessage])
     return (
         <View>
             <Text>{appState}</Text>
