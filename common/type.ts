@@ -20,3 +20,8 @@ export interface SMSMessage {
 export interface SpamLabel{
     spam?:boolean
 }
+export interface Message{
+  message:string,
+  spam:any,
+  number?:string
+}

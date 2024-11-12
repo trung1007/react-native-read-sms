@@ -67,7 +67,7 @@ const VoiceRecord = () => {
           Voice Record
         </Text>
         <Text style={{ marginTop: 20, fontSize: 16 }}>
-          {result || 'Waiting for speech...'}
+          {result || 'Hãy nói gì đó'}
         </Text>
   
         <TouchableOpacity
@@ -80,7 +80,7 @@ const VoiceRecord = () => {
           }}
         >
           <Text style={{ color: 'white', fontWeight: '500' }}>
-            {isRecording ? 'Stop Recording' : 'Start Recording'}
+            {isRecording ? 'Dừng ghi âm' : 'Bắt đầu ghi âm'}
           </Text>
         </TouchableOpacity>
       </View>

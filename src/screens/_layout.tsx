@@ -79,23 +79,23 @@ const Layout = () => {
             console.log(error);
         }
     }
-    useEffect(() => {
-        if (appState === 'background') {
-            startBackgroundService()
-            // if (message.length > 0) {
-            //     detectMessage(message, appState)
-            // }
-        }
-        if (appState === 'active') {
-            stopBackgroundService()
-            // if(receivedSmsMessage !== null){
-            //     console.log(receivedSmsMessage);
-            //     if(typeof receivedSmsMessage === 'string'){
-            //         detectMessage(receivedSmsMessage, appState)
-            //     }      
-            // }
-        }
-    }, [appState, message, receivedSmsMessage])
+    // useEffect(() => {
+    //     if (appState === 'background') {
+    //         startBackgroundService()
+    //         // if (message.length > 0) {
+    //         //     detectMessage(message, appState)
+    //         // }
+    //     }
+    //     if (appState === 'active') {
+    //         stopBackgroundService()
+    //         // if(receivedSmsMessage !== null){
+    //         //     console.log(receivedSmsMessage);
+    //         //     if(typeof receivedSmsMessage === 'string'){
+    //         //         detectMessage(receivedSmsMessage, appState)
+    //         //     }      
+    //         // }
+    //     }
+    // }, [appState, message, receivedSmsMessage])
     return (
         // <View>
         //     <Text>{appState}</Text>
@@ -105,7 +105,8 @@ const Layout = () => {
         //     <Tab.Screen name="Message" component={MessageScreen}/>
         //     <Tab.Screen name="Voice" component={VoiceScreen}/>
         // </Tab.Navigator>
-        <VoiceScreen/>
+        // <VoiceScreen/>
+        <MessageScreen/>
     )
 }
 
