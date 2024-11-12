@@ -7,12 +7,7 @@ import MessageBox from '../../components/MessagBox';
 
 const MessageScreen = () => {
     const [loading, setLoading] = useState(false);
-    const messages: Message[] = []
-
-    const messages1: Message[] = [
-        { message: "This is a message", spam: true },
-        { message: "Another message", spam: false }
-      ];
+    const [messages, setMessages] = useState<Message[]>([]); 
     const handleCheckSms = async () => {
         setLoading(true); // Start loading
         try {
@@ -21,16 +16,14 @@ const MessageScreen = () => {
                 await Promise.all(
                     allMessage.map(async (message: any) => {
                         try {
-                            console.log('checking');
-
                             const prediction = await detectSpam(message.body);
-                            // if (prediction.spam) {
-                            //     console.log(message.body);
-                            // }
-                            messages.push({
-                                message: message.body,
-                                spam: prediction
-                            })
+                            if (prediction.spam) {
+                                console.log(message.body);
+                            }
+                            setMessages(prevMessages => [
+                                ...prevMessages,
+                                { message: message.body, spam: prediction }
+                            ]);
                         } catch (error) {
                             console.log(error);
                         }
@@ -42,8 +35,10 @@ const MessageScreen = () => {
         } finally {
             setLoading(false); // Stop loading when done
         }
-        console.log(messages);
-
+        // messages.map((item:any)=>{
+        //     console.log(item.spam);
+        // })
+        
     }
 
     return (
@@ -65,11 +60,9 @@ const MessageScreen = () => {
             <View style={styles.historySms}>
                 <Text>Lịch sử tin nhắn của bạn</Text>
                 <View style={{ width: 380, borderWidth: 1, height: '95%' }} >
-                    
-                    {messages1.map((item, index) => (
+                    {messages.map((item, index) => (
                         <MessageBox key={index} message={item.message} spam={item.spam} />
                     ))}
-
                 </View>
             </View>
             <View style={styles.content}>
