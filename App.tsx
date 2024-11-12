@@ -3,23 +3,32 @@ import {
   SafeAreaView,
   StyleSheet,
   AppState,
-  AppStateStatus
+  AppStateStatus,
+  View,
+  Text,
+  Button
 } from 'react-native';
 import MyService from './src/service/Service';
 import { AppStateProvider } from './context/AppStateContext';
 import { MessageProvider } from './context/MessageContext';
 import TestState from './src/testState';
 import Layout from './src/screens/_layout';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import 'react-native-gesture-handler'
+
+
 
 const App = () => {
   return (
     <AppStateProvider>
       <MessageProvider>
-        <SafeAreaView style={styles.container}>
-          <Layout />
-          {/* <MyService /> */}
-          {/* <TestState/> */}
-        </SafeAreaView >
+        <NavigationContainer>
+          <SafeAreaView style={styles.container}>
+            <Layout />
+          </SafeAreaView >
+        </NavigationContainer>
       </MessageProvider>
     </AppStateProvider>
 

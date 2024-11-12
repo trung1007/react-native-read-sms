@@ -9,7 +9,11 @@ import { fetchSMSMessages } from "../../hook/useSMS";
 import LocalNotification from "../../LocalNotification"
 import { useMessageContext } from "../../context/MessageContext"
 import usePermission from "../../hook/usePermision"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import MessageScreen from "./MessageScreen"
+import VoiceScreen from "./VoiceScreen"
 
+const Tab = createBottomTabNavigator();
 
 const Layout = () => {
 
@@ -78,27 +82,30 @@ const Layout = () => {
     useEffect(() => {
         if (appState === 'background') {
             startBackgroundService()
-            if (message.length > 0) {
-                detectMessage(message, appState)
-            }
+            // if (message.length > 0) {
+            //     detectMessage(message, appState)
+            // }
         }
         if (appState === 'active') {
             stopBackgroundService()
-            console.log(receivedSmsMessage);
-            
-            if(receivedSmsMessage !== null){
-                console.log(receivedSmsMessage);
-                if(typeof receivedSmsMessage === 'string'){
-                    detectMessage(receivedSmsMessage, appState)
-                }      
-            }
+            // if(receivedSmsMessage !== null){
+            //     console.log(receivedSmsMessage);
+            //     if(typeof receivedSmsMessage === 'string'){
+            //         detectMessage(receivedSmsMessage, appState)
+            //     }      
+            // }
         }
     }, [appState, message, receivedSmsMessage])
     return (
-        <View>
-            <Text>{appState}</Text>
-            <Text></Text>
-        </View>
+        // <View>
+        //     <Text>{appState}</Text>
+        //     <Text></Text>
+        // </View>
+        // <Tab.Navigator > 
+        //     <Tab.Screen name="Message" component={MessageScreen}/>
+        //     <Tab.Screen name="Voice" component={VoiceScreen}/>
+        // </Tab.Navigator>
+        <VoiceScreen/>
     )
 }
 
