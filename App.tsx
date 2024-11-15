@@ -3,23 +3,30 @@ import {
   SafeAreaView,
   StyleSheet,
   AppState,
-  AppStateStatus
+  AppStateStatus,
+  View,
+  Text,
+  Button
 } from 'react-native';
 import MyService from './src/service/Service';
 import { AppStateProvider } from './context/AppStateContext';
 import { MessageProvider } from './context/MessageContext';
 import TestState from './src/testState';
-import Layout from './src/screens/_layout';
+import Layout from './src/screens';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+
+
+
 
 const App = () => {
   return (
     <AppStateProvider>
       <MessageProvider>
-        <SafeAreaView style={styles.container}>
-          <Layout />
-          {/* <MyService /> */}
-          {/* <TestState/> */}
-        </SafeAreaView >
+        <NavigationContainer>
+          <SafeAreaView style={styles.container}>
+            <Layout />
+          </SafeAreaView >
+        </NavigationContainer>
       </MessageProvider>
     </AppStateProvider>
 
