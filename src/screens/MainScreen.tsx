@@ -24,13 +24,12 @@ const MainScreen = () => {
                 }}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => setModalMessageVisible(!modalMessageVisible)}>
-                            <Text style={styles.textStyle}>Xong</Text>
-                        </Pressable>
                         <MessageScreen />
-
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => setModalMessageVisible(false)}>
+                            <Text style={styles.textStyle}>Xong</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
@@ -50,7 +49,7 @@ const MainScreen = () => {
                     <View style={styles.modalView}>
                         <VoiceScreen />
                         <Pressable
-                            style={[styles.button, styles.buttonClose]}
+                            style={styles.button}
                             onPress={() => setModalVoiceVisible(!modalVoiceVisible)}>
                             <Text style={styles.textStyle}>Hide Modal</Text>
                         </Pressable>
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
         flex: 1,
         // padding: 35,
         // alignItems: 'center',
-        margin:4,
+        margin: 4,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -113,15 +112,12 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     button: {
+        backgroundColor: '#192A29',
         borderRadius: 20,
         padding: 10,
+        position: 'absolute',
+        right: 12,
         elevation: 2,
-    },
-    buttonOpen: {
-        backgroundColor: '#F194FF',
-    },
-    buttonClose: {
-        backgroundColor: '#2196F3',
     },
     textStyle: {
         color: 'white',

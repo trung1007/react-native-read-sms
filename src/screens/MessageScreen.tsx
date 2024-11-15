@@ -56,7 +56,7 @@ const MessageScreen = () => {
             <View style={styles.content}>
                 {loading ? (
                    <View >
-                     <ActivityIndicator size="large" color="gray" />
+                     <ActivityIndicator size="large" color="#192A29" />
                    </View>
                 ) : null}
             </View>
@@ -79,6 +79,7 @@ const MessageScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        marginTop:12
     },
     content: {
         display: 'flex',
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        color: 'black',
+        color: '#192A29',
         fontSize: 24,
         fontWeight:'600'
     },
