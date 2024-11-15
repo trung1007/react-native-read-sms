@@ -45,16 +45,7 @@ const MainScreen = () => {
                     Alert.alert('Modal has been closed.');
                     setModalVoiceVisible(!modalVoiceVisible);
                 }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <VoiceScreen />
-                        <Pressable
-                            style={styles.button}
-                            onPress={() => setModalVoiceVisible(!modalVoiceVisible)}>
-                            <Text style={styles.textStyle}>Hide Modal</Text>
-                        </Pressable>
-                    </View>
-                </View>
+                <VoiceScreen onClose={() => { setModalVoiceVisible(false) }} />
             </Modal>
             <View style={styles.content}>
                 <TouchableOpacity style={[styles.box]} >
