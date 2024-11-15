@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import usePermission from '../hook/usePermision';
 import { fetchSMSMessages } from '../hook/useSMS';
 import { detectSpam } from '../utils/detectSpam';
 import LocalNotification from '../LocalNotification';
@@ -11,8 +10,6 @@ interface MessageProviderProps {
 }
 
 export const MessageProvider: React.FC<MessageProviderProps> = ({ children }) => {
-
-    const { receiveSmsPermission, receivedSmsMessage, receivedSmsPhoneNumber, notifcationPermission } = usePermission()
     const [smsMessage, setSmsMessage] = useState('')
 
     const getSmsMessage = async () => {
@@ -26,23 +23,9 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({ children }) =>
             console.log(error);
         }
     }
-    // const detectMessage = async (message: string) => {
-    //     try {
-    //         const prediction = await detectSpam(message)
-    //         console.log("prediction in foreground: " + prediction.spam);
-    //         if (prediction.spam) {
-    //             LocalNotification(message)
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
 
     useEffect(() => {
         getSmsMessage()
-        // if (smsMessage.length > 0) {
-        //     detectMessage(smsMessage)
-        // }
     }, [smsMessage])
 
     return (

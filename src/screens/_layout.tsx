@@ -8,17 +8,18 @@ import BackgroundService from 'react-native-background-actions';
 import { fetchSMSMessages } from "../../hook/useSMS";
 import LocalNotification from "../../LocalNotification"
 import { useMessageContext } from "../../context/MessageContext"
-import usePermission from "../../hook/usePermision"
+// import usePermission from "../../hook/usePermision"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import MessageScreen from "./MessageScreen"
 import VoiceScreen from "./VoiceScreen"
+import MainScreen from "./MainScreen"
 
 const Tab = createBottomTabNavigator();
 
 const Layout = () => {
 
     const [message, setMessage] = useState('')
-    const  { receiveSmsPermission, receivedSmsMessage, receivedSmsPhoneNumber, notifcationPermission} = usePermission()
+    // const  { receiveSmsPermission, receivedSmsMessage, receivedSmsPhoneNumber, notifcationPermission} = usePermission()
     // @ts-ignore
     const sleep = (time: any) => new Promise((resolve) => setTimeout(() => resolve(), time));
     const veryIntensiveTask = async (taskDataArguments: any) => {
@@ -101,12 +102,8 @@ const Layout = () => {
         //     <Text>{appState}</Text>
         //     <Text></Text>
         // </View>
-        // <Tab.Navigator > 
-        //     <Tab.Screen name="Message" component={MessageScreen}/>
-        //     <Tab.Screen name="Voice" component={VoiceScreen}/>
-        // </Tab.Navigator>
-        // <VoiceScreen/>
-        <MessageScreen/>
+        <MainScreen/>
+        // <MessageScreen/>
     )
 }
 

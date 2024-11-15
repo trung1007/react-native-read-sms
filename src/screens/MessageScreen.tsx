@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native"
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView, Modal, Alert, Pressable } from "react-native"
 import { fetchSMSMessages } from "../../hook/useSMS"
 import { detectSpam } from "../../utils/detectSpam";
 import { Message } from '../../common/type';
 import MessageBox from '../../components/MessagBox';
+import VoiceScreen from './VoiceScreen';
+import { useMessageContext } from '../../context/MessageContext';
 
 const MessageScreen = () => {
     const [loading, setLoading] = useState(false);
-    const [messages, setMessages] = useState<Message[]>([]); 
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const sms = useMessageContext()
     const handleCheckSms = async () => {
         setLoading(true); // Start loading
         try {
@@ -15,6 +19,8 @@ const MessageScreen = () => {
             if (allMessage.length > 0) {
                 await Promise.all(
                     allMessage.map(async (message: any) => {
+                        console.log(message);
+
                         try {
                             const prediction = await detectSpam(message.body);
                             if (prediction.spam) {
@@ -22,7 +28,7 @@ const MessageScreen = () => {
                             }
                             setMessages(prevMessages => [
                                 ...prevMessages,
-                                { message: message.body, spam: prediction }
+                                { message: message.body, spam: prediction, number: message.address }
                             ]);
                         } catch (error) {
                             console.log(error);
@@ -38,39 +44,35 @@ const MessageScreen = () => {
         // messages.map((item:any)=>{
         //     console.log(item.spam);
         // })
-        
+
     }
+    useEffect(() => {
+        handleCheckSms()
+    },[])
 
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <TouchableOpacity
-                    style={[styles.box]}
-                    onPress={handleCheckSms}
-                    disabled={loading} // Disable button when loading
-                >
-                    {loading ? (
-                        <ActivityIndicator size='large' color="#ffffff" />
-                    ) : (<Text style={[styles.text]}>
-                        Kiểm tra lịch sử tin nhắn của bạn
-                    </Text>)}
-
-                </TouchableOpacity>
+                {loading ? (
+                   <Text>Loading</Text>
+                ) : (<Text style={[styles.text]}>
+                    Kiểm tra lịch sử tin nhắn của bạn
+                </Text>)}
+                {/* <Text style={[styles.text]}>
+                    Kiểm tra lịch sử tin nhắn của bạn
+                </Text> */}
             </View>
-            <View style={styles.historySms}>
+            {messages.length > 0 ? (<View style={styles.historySms}>
                 <Text>Lịch sử tin nhắn của bạn</Text>
                 <View style={{ width: 380, borderWidth: 1, height: '95%' }} >
-                    {messages.map((item, index) => (
-                        <MessageBox key={index} message={item.message} spam={item.spam} />
-                    ))}
+                    <ScrollView>
+                        {messages.map((item, index) => (
+                            <MessageBox key={index} message={item.message} spam={item.spam} number={item.number} />
+                        ))}
+                    </ScrollView>
                 </View>
-            </View>
-            <View style={styles.content}>
-                <TouchableOpacity style={[styles.box]} >
-                    <Text style={[styles.text]}>Cho phép ứng dụng phát hiện tin nhắn lừa đảo</Text>
-                </TouchableOpacity>
-            </View>
-
+            </View>) : null
+            }
         </View>
     )
 }
@@ -105,6 +107,5 @@ const styles = StyleSheet.create({
         marginTop: 20,
         flex: 1
     },
-
 })
 export default MessageScreen

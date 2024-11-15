@@ -1,5 +1,6 @@
 package com.react_native_read_sms; // Replace it with your app-name
 
+import java.io.IOException; // Ensure this is included
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

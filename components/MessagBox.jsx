@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-const MessageBox = ({message, spam}) => {
+const MessageBox = ({message, spam, number}) => {
   return (
     <View
       style={{
@@ -9,8 +8,9 @@ const MessageBox = ({message, spam}) => {
         margin: 5,
         backgroundColor: spam.spam ? '#ffcccc' : '#ccffcc',
       }}>
-      <Text>{message}</Text>
-      <Text>{spam.spam ? 'Spam' : 'Not Spam'}</Text>
+      <Text>SĐT: {number}</Text>
+      <Text>Tin nhắn: {message}</Text>
+      {/* <Text>{spam.spam ? 'Spam' : 'Not Spam'}</Text> */}
     </View>
   );
 };

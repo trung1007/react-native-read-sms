@@ -15,8 +15,6 @@ import TestState from './src/testState';
 import Layout from './src/screens/_layout';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import 'react-native-gesture-handler'
 
 
 
