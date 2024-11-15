@@ -13,6 +13,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import MessageScreen from "./MessageScreen"
 import VoiceScreen from "./VoiceScreen"
 import MainScreen from "./MainScreen"
+import Header from "../../components/Header"
 
 const Tab = createBottomTabNavigator();
 
@@ -71,11 +72,11 @@ const Layout = () => {
     const detectMessage = async (message: string, appState: string) => {
         console.log(message);
         try {
-           const prediction= await detectSpam(message)
-           console.log('prediction in ' + appState + ": " + prediction.spam);
-           if(prediction.spam){
-            LocalNotification(message)
-           }
+            const prediction = await detectSpam(message)
+            console.log('prediction in ' + appState + ": " + prediction.spam);
+            if (prediction.spam) {
+                LocalNotification(message)
+            }
         } catch (error) {
             console.log(error);
         }
@@ -102,7 +103,15 @@ const Layout = () => {
         //     <Text>{appState}</Text>
         //     <Text></Text>
         // </View>
-        <MainScreen/>
+        // <Tab.Navigator>
+        //     <Tab.Screen name="Message" component={MessageScreen}></Tab.Screen>
+        //     <Tab.Screen name="Voice" component={VoiceScreen}></Tab.Screen>
+        // </Tab.Navigator>
+        <View style={{ flex: 1 }}>
+            <Header />
+            <MainScreen />
+        </View>
+
         // <MessageScreen/>
     )
 }

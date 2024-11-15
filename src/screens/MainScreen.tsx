@@ -20,17 +20,17 @@ const MainScreen = () => {
                 animationType="slide"
                 visible={modalMessageVisible}
                 onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
                     setModalMessageVisible(!modalMessageVisible);
                 }}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <MessageScreen />
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setModalMessageVisible(!modalMessageVisible)}>
-                            <Text style={styles.textStyle}>Hide Modal</Text>
+                            <Text style={styles.textStyle}>Xong</Text>
                         </Pressable>
+                        <MessageScreen />
+
                     </View>
                 </View>
             </Modal>
@@ -91,22 +91,18 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16
     },
-    historySms: {
-        alignItems: 'center',
-        marginTop: 20,
-        flex: 1
-    },
     centeredView: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        // justifyContent: 'center',
+        // alignItems: 'center',
     },
     modalView: {
-        margin: 20,
         backgroundColor: 'white',
         borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
+        flex: 1,
+        // padding: 35,
+        // alignItems: 'center',
+        margin:4,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,

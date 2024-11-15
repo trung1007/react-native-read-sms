@@ -12,7 +12,7 @@ import MyService from './src/service/Service';
 import { AppStateProvider } from './context/AppStateContext';
 import { MessageProvider } from './context/MessageContext';
 import TestState from './src/testState';
-import Layout from './src/screens/_layout';
+import Layout from './src/screens';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 

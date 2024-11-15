@@ -6,6 +6,7 @@ import { Message } from '../../common/type';
 import MessageBox from '../../components/MessagBox';
 import VoiceScreen from './VoiceScreen';
 import { useMessageContext } from '../../context/MessageContext';
+import Loading from '../../components/Loading';
 
 const MessageScreen = () => {
     const [loading, setLoading] = useState(false);
@@ -54,17 +55,14 @@ const MessageScreen = () => {
         <View style={styles.container}>
             <View style={styles.content}>
                 {loading ? (
-                   <Text>Loading</Text>
-                ) : (<Text style={[styles.text]}>
-                    Kiểm tra lịch sử tin nhắn của bạn
-                </Text>)}
-                {/* <Text style={[styles.text]}>
-                    Kiểm tra lịch sử tin nhắn của bạn
-                </Text> */}
+                   <View >
+                     <ActivityIndicator size="large" color="gray" />
+                   </View>
+                ) : null}
             </View>
             {messages.length > 0 ? (<View style={styles.historySms}>
-                <Text>Lịch sử tin nhắn của bạn</Text>
-                <View style={{ width: 380, borderWidth: 1, height: '95%' }} >
+                <Text style={styles.title}>Lịch sử tin nhắn của bạn</Text>
+                <View style={{ width: '100%', height: '95%' }} >
                     <ScrollView>
                         {messages.map((item, index) => (
                             <MessageBox key={index} message={item.message} spam={item.spam} number={item.number} />
@@ -81,30 +79,19 @@ const MessageScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20
     },
     content: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20
     },
-    box: {
-        backgroundColor: 'green',
-        padding: 12,
-        borderRadius: 12,
-        width: 'auto',
-        height: 48,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    text: {
-        color: 'white',
-        fontSize: 16
+    title: {
+        color: 'black',
+        fontSize: 24,
+        fontWeight:'600'
     },
     historySms: {
-        alignItems: 'center',
-        marginTop: 20,
+        width:'100%',
         flex: 1
     },
 })
