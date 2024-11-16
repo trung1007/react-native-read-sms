@@ -7,6 +7,8 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import Voice from '@react-native-voice/voice';
 import { useEffect, useState } from "react";
 import requestPermission from "../../utils/requestPermision";
+import { detectSpam } from "../../utils/detectSpam";
+import LocalNotification from "../../LocalNotification";
 
 
 type ModalContentProps = {
@@ -14,62 +16,64 @@ type ModalContentProps = {
 };
 
 const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
-
     const [isRecording, setIsRecording] = useState(false);
     const [result, setResult] = useState("");
-
-    // // Function to request permissions (needed on Android)
-    // const requestPermission = async () => {
-    //   if (Platform.OS === 'android') {
-    //     const granted = await PermissionsAndroid.request(
-    //       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, 
-    //       {
-    //         title: "Microphone Permission",
-    //         message: "We need access to your microphone to recognize your speech"
-    //       }
-    //     );
-    //     if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-    //       ToastAndroid.show("Microphone permission denied", ToastAndroid.SHORT);
-    //       return false;
-    //     }
-    //   }
-    //   return true;
-    // };
 
     // Start recording
     const startRecording = async () => {
         const permissionGranted = await requestPermission();
         if (permissionGranted) {
             setIsRecording(true);
-            // Voice.start('vi-VN'); // Start the voice recognition
+            Voice.start('vi-VN'); // Start the voice recognition
         }
     };
 
     // Stop recording
-    const stopRecording = () => {
+    const handleStopRecording = () => {
         setIsRecording(false);
-        // Voice.stop(); // Stop the voice recognition
+        Voice.stop(); // Stop the voice recognition
         // onClose()
+        if (!isRecording) {
+            onClose()
+        }
     };
 
-    // Setup event listeners for speech recognition events
-    useEffect(() => {
+    const handleVoice = () => {
         // Setup Voice event listeners
         Voice.onSpeechStart = () => console.log("Speech recognition started");
         Voice.onSpeechEnd = () => console.log("Speech recognition ended");
         Voice.onSpeechResults = (e) => {
-            console.log("Speech results:", e);
-            setResult(e.value ? e.value[0] : ''); // Update state with recognized text
+            console.log("Final speech results:", e.value);
+            setResult(e.value ? e.value[0] : ''); // Update state with final recognized text
+        };
+        Voice.onSpeechPartialResults = async (e) => {
+            console.log("Partial speech results:", e.value);
+            setResult((e.value ? e.value[0] : '') + '...'); // Update state with partial recognized text
+            try {
+                const prediction = await detectSpam(e.value ? e.value[0] : '')
+                if (prediction.spam) {
+                    setIsRecording(false);
+                    Voice.stop();
+                    LocalNotification(e.value ? e.value[0] : '')
+                }
+            } catch (error) {
+
+            }
         };
         Voice.onSpeechError = (e) => {
             console.log("Speech error:", e);
-            setResult('Error: ' + e.error);
         };
 
         // Cleanup on unmount
         return () => {
             Voice.destroy().then(Voice.removeAllListeners);
         };
+    }
+
+    // Setup event listeners for speech recognition events
+    useEffect(() => {
+        const voiceListener = handleVoice()
+        return voiceListener
     }, []);
 
 
@@ -84,12 +88,17 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                     <Text style={styles.userNum}>+84 775313999</Text>
                 </View>
                 {isRecording ? (<Image style={styles.userImg} source={require('../../assets/img/user_img.png')} />) : null}
-
             </View>
+            <Text style={{ color: 'white', fontWeight: '500' }}>
+                {result || 'Hãy nói gì đó'}
+            </Text>
+            {/* <Text style={{ color: 'white', fontWeight: '500' }}>
+                {isRecording ? 'Dừng ghi âm' : 'Bắt đầu ghi âm'}
+            </Text> */}
             <View style={styles.phoneControl}>
                 <View style={styles.phoneBtn}>
                     <TouchableOpacity
-                        onPress={onClose}
+                        onPress={handleStopRecording}
                         style={[styles.button, styles.reject]}
                     >
                         <MaterialCommunityIcons name="phone-hangup" style={{ color: '#ffffff', fontSize: 32 }} />
@@ -98,7 +107,7 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                 </View>
                 {!isRecording ? (<View style={styles.phoneBtn}>
                     <TouchableOpacity
-                        onPress={isRecording ? stopRecording : startRecording}
+                        onPress={isRecording ? handleStopRecording : startRecording}
                         style={[styles.button, styles.accept]}
                     >
                         <Ionicons name="call" style={{ color: '#ffffff', fontSize: 32 }} />

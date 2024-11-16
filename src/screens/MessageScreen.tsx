@@ -20,8 +20,6 @@ const MessageScreen = () => {
             if (allMessage.length > 0) {
                 await Promise.all(
                     allMessage.map(async (message: any) => {
-                        console.log(message);
-
                         try {
                             const prediction = await detectSpam(message.body);
                             if (prediction.spam) {

@@ -15,7 +15,7 @@ const LocalNotification = (spamMessage) => {
     PushNotification.localNotification({
         channelId: key, //this must be same with channelid in createchannel
         title: 'Cảnh báo tin nhắn độc hại',
-        message: (spamMessage ?? 'Local message') + key,
+        message: (spamMessage ?? 'Local message' + key),
         priority: "max",
     })
 };

@@ -2,7 +2,8 @@ import { View, Text, StyleSheet, Modal, Pressable, TouchableOpacity, Alert } fro
 import MessageScreen from "./MessageScreen"
 import { useState } from "react";
 import VoiceScreen from "./VoiceScreen";
-
+// @ts-ignore
+import AntDesign  from "react-native-vector-icons/AntDesign";
 
 const MainScreen = () => {
 
@@ -28,7 +29,8 @@ const MainScreen = () => {
                         <TouchableOpacity
                             style={styles.button}
                             onPress={() => setModalMessageVisible(false)}>
-                            <Text style={styles.textStyle}>Xong</Text>
+                            <AntDesign name='down' style={{fontSize:16, color:'#ffffff'}} />
+                            {/* <Text style={styles.textStyle}>Xong</Text> */}
                         </TouchableOpacity>
                     </View>
                 </View>
