@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Pressable, Image, TouchableOpacity, PermissionsAndroid, ToastAndroid, Platform } from "react-native"
+import { Text, View, StyleSheet, Pressable, Image, TouchableOpacity, PermissionsAndroid, ToastAndroid, Platform, Modal, Dimensions } from "react-native"
 import VoiceRecord from "../voiceRecord"
 // @ts-ignore
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -8,7 +8,13 @@ import Voice from '@react-native-voice/voice';
 import { useEffect, useState } from "react";
 import requestPermission from "../../utils/requestPermision";
 import { detectSpam } from "../../utils/detectSpam";
+// @ts-ignore
+import AntDesign from "react-native-vector-icons/AntDesign";
+import FakeBtnGroup from "../../components/FakeBtn";
 import LocalNotification from "../../LocalNotification";
+import MessageDetail from "../../components/MessageDetail";
+
+const { width, height } = Dimensions.get('window');
 
 
 type ModalContentProps = {
@@ -18,6 +24,8 @@ type ModalContentProps = {
 const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
     const [isRecording, setIsRecording] = useState(false);
     const [result, setResult] = useState("");
+    const [messageVisible, setMessageVisible] = useState(false)
+    const [spam, setSpam] = useState<{ spam?: boolean }>({ spam: false })
 
     // Start recording
     const startRecording = async () => {
@@ -30,6 +38,7 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
 
     // Stop recording
     const handleStopRecording = () => {
+        setMessageVisible(true)
         setIsRecording(false);
         Voice.stop(); // Stop the voice recognition
         // onClose()
@@ -39,26 +48,37 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
     };
 
     const handleVoice = () => {
+        setMessageVisible(false)
         // Setup Voice event listeners
         Voice.onSpeechStart = () => console.log("Speech recognition started");
         Voice.onSpeechEnd = () => console.log("Speech recognition ended");
-        Voice.onSpeechResults = (e) => {
+        Voice.onSpeechResults = async (e) => {
             console.log("Final speech results:", e.value);
             setResult(e.value ? e.value[0] : ''); // Update state with final recognized text
-        };
-        Voice.onSpeechPartialResults = async (e) => {
-            console.log("Partial speech results:", e.value);
-            setResult((e.value ? e.value[0] : '') + '...'); // Update state with partial recognized text
             try {
                 const prediction = await detectSpam(e.value ? e.value[0] : '')
-                if (prediction.spam) {
-                    setIsRecording(false);
-                    Voice.stop();
-                    LocalNotification(e.value ? e.value[0] : '')
-                }
+                console.log('voiceScreen');
+                console.log(prediction);
+                setSpam(prediction)
             } catch (error) {
-
+                console.log(error);
             }
+        };
+        Voice.onSpeechPartialResults = async (e) => {
+            // console.log("Partial speech results:", e.value);
+            // setResult((e.value ? e.value[0] : '') + '...'); // Update state with partial recognized text
+            // try {
+            //     const prediction = await detectSpam(e.value ? e.value[0] : '')
+            //     console.log(prediction.spam);
+            //     console.log(e.value ? e.value[0] : '');
+            //     if (prediction.spam) {
+            //         setIsRecording(false);
+            //         Voice.stop();
+            //         LocalNotification(e.value ? e.value[0] : '')
+            //     }
+            // } catch (error) {
+            //     console.log(error);
+            // }
         };
         Voice.onSpeechError = (e) => {
             console.log("Speech error:", e);
@@ -89,19 +109,44 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                 </View>
                 {isRecording ? (<Image style={styles.userImg} source={require('../../assets/img/user_img.png')} />) : null}
             </View>
-            <Text style={{ color: 'white', fontWeight: '500' }}>
-                {result || 'Hãy nói gì đó'}
-            </Text>
-            {/* <Text style={{ color: 'white', fontWeight: '500' }}>
-                {isRecording ? 'Dừng ghi âm' : 'Bắt đầu ghi âm'}
-            </Text> */}
+            {isRecording ? (
+                <View>
+                    <FakeBtnGroup />
+                </View>
+            ) : null}
+            {/* {messageVisible ? (
+                <View>
+                    <Text>Nội dung cuộc gọi: {result}</Text>
+                </View>
+            ) : null} */}
+
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={messageVisible}
+                onRequestClose={() => {
+                    setMessageVisible(false)
+                }}>
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <TouchableOpacity
+                            style={styles.closeButton}
+                            onPress={() => {
+                                setMessageVisible(false)
+                            }}>
+                            <Text style={styles.closeText}>Đóng</Text>
+                        </TouchableOpacity>
+                        <MessageDetail message={result} spam={spam} number={'775 313 999'} type={'phone'} />
+                    </View>
+                </View>
+            </Modal>
             <View style={styles.phoneControl}>
                 <View style={styles.phoneBtn}>
                     <TouchableOpacity
                         onPress={handleStopRecording}
                         style={[styles.button, styles.reject]}
                     >
-                        <MaterialCommunityIcons name="phone-hangup" style={{ color: '#ffffff', fontSize: 32 }} />
+                        <MaterialCommunityIcons name="phone-hangup" style={{ color: '#ffffff', fontSize: 40 }} />
                     </TouchableOpacity>
                     <Text style={styles.textStyle}>Từ chối</Text>
                 </View>
@@ -110,11 +155,10 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                         onPress={isRecording ? handleStopRecording : startRecording}
                         style={[styles.button, styles.accept]}
                     >
-                        <Ionicons name="call" style={{ color: '#ffffff', fontSize: 32 }} />
+                        <Ionicons name="call" style={{ color: '#ffffff', fontSize: 40 }} />
                     </TouchableOpacity>
                     <Text style={styles.textStyle}>Chấp Nhận</Text>
                 </View>) : null}
-
             </View>
 
         </View>
@@ -198,6 +242,35 @@ const styles = StyleSheet.create({
     modalText: {
         marginBottom: 15,
         textAlign: 'center',
+    },
+
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        width: width * 0.9,
+        height: height * 0.4,
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 12,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 12,
+        top: 12
+    },
+    closeText: {
+        color: '#007BFF',
+        fontSize: 16,
     },
 })
 

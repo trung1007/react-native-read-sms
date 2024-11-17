@@ -56,7 +56,7 @@ const MessageBox = ({message, spam, number}) => {
               }}>
               <Text style={styles.closeText}>Đóng</Text>
             </TouchableOpacity>
-            <MessageDetail message={message} spam={spam} number={number} />
+            <MessageDetail message={message} spam={spam} number={number} type={'message'} />
           </View>
         </View>
       </Modal>

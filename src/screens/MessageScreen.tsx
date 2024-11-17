@@ -11,10 +11,23 @@ import Loading from '../../components/Loading';
 const MessageScreen = () => {
     const [loading, setLoading] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
-    const [modalVisible, setModalVisible] = useState(false);
-    const sms = useMessageContext()
+    const [dots, setDots] = useState("");
+    // const sms = useMessageContext()
     const handleCheckSms = async () => {
         setLoading(true); // Start loading
+        // Khởi tạo hiệu ứng cho dots
+        let  counter = 0
+        let interval: ReturnType<typeof setInterval> | null = null;
+        interval = setInterval(() => {
+            setDots((prev) => (prev.length < 3 ? prev + "." : ""));
+            console.log(dots);
+            
+            counter++
+            if(counter>5){
+                clearInterval(interval!)
+            }
+        }, 1000);
+      
         try {
             const allMessage = await fetchSMSMessages({ read: undefined, maxCount: undefined });
             if (allMessage.length > 0) {
@@ -38,24 +51,34 @@ const MessageScreen = () => {
         } catch (error) {
             console.error("Error fetching SMS messages:", error);
         } finally {
+            if (interval) clearInterval(interval);
+            setDots(""); // Reset dots
             setLoading(false); // Stop loading when done
         }
-        // messages.map((item:any)=>{
-        //     console.log(item.spam);
-        // })
-
     }
     useEffect(() => {
         handleCheckSms()
-    },[])
+        // setInterval(()=>{
+        //     setDots((prev) => (prev.length < 3 ? prev + "." : ""));
+        // },1000)
+        
+
+    }, [])
+
 
     return (
         <View style={styles.container}>
             <View style={styles.content}>
                 {loading ? (
-                   <View >
-                     <ActivityIndicator size="large" color="#192A29" />
-                   </View>
+                    <View >
+                        <ActivityIndicator size="large" color="#192A29" />
+                        <Text style={{
+                            marginTop: 20,
+                            fontSize: 16,
+                            color: "#192A29",
+                            fontWeight: "bold",
+                        }}>Đang kiểm tra lịch sử tin nhắn của bạn{dots}</Text>
+                    </View>
                 ) : null}
             </View>
             {messages.length > 0 ? (<View style={styles.historySms}>
@@ -77,7 +100,7 @@ const MessageScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop:12
+        marginTop: 12
     },
     content: {
         display: 'flex',
@@ -87,10 +110,10 @@ const styles = StyleSheet.create({
     title: {
         color: '#192A29',
         fontSize: 24,
-        fontWeight:'600'
+        fontWeight: '600'
     },
     historySms: {
-        width:'100%',
+        width: '100%',
         flex: 1
     },
 })
