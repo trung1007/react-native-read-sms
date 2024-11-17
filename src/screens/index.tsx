@@ -14,15 +14,23 @@ import MessageScreen from "./MessageScreen"
 import VoiceScreen from "./VoiceScreen"
 import MainScreen from "./MainScreen"
 import Header from "../../components/Header"
+import usePermission from "../../hook/usePermision"
 
 const Tab = createBottomTabNavigator();
 
 const Layout = () => {
 
     const [message, setMessage] = useState('')
-    // const  { receiveSmsPermission, receivedSmsMessage, receivedSmsPhoneNumber, notifcationPermission} = usePermission()
+    const { receiveSmsPermission, receivedSmsMessage, receivedSmsPhoneNumber, notifcationPermission } = usePermission()
+    const [allowDetect, setAllowDetect] = useState(false)
     // @ts-ignore
     const sleep = (time: any) => new Promise((resolve) => setTimeout(() => resolve(), time));
+
+    const handleAllow = ()=>{
+        setAllowDetect(!allowDetect)
+    }
+
+
     const veryIntensiveTask = async (taskDataArguments: any) => {
         // Example of an infinite loop task
         const { delay } = taskDataArguments;
@@ -81,38 +89,34 @@ const Layout = () => {
             console.log(error);
         }
     }
-    // useEffect(() => {
-    //     if (appState === 'background') {
-    //         startBackgroundService()
-    //         // if (message.length > 0) {
-    //         //     detectMessage(message, appState)
-    //         // }
-    //     }
-    //     if (appState === 'active') {
-    //         stopBackgroundService()
-    //         // if(receivedSmsMessage !== null){
-    //         //     console.log(receivedSmsMessage);
-    //         //     if(typeof receivedSmsMessage === 'string'){
-    //         //         detectMessage(receivedSmsMessage, appState)
-    //         //     }      
-    //         // }
-    //     }
-    // }, [appState, message, receivedSmsMessage])
+    useEffect(() => {
+        if(!allowDetect && appState === 'background'){
+            console.log("ứng dụng chưa thể detect trong nền");
+            
+        }
+        
+        if (allowDetect &&  appState === 'background') {
+            console.log("có thể detect trong nền");
+            startBackgroundService()
+            if (message.length > 0) {
+                detectMessage(message, appState)
+            }
+        }
+        // if (appState === 'active') {
+        //     stopBackgroundService()
+        //     if (receivedSmsMessage !== null) {
+        //         console.log(receivedSmsMessage);
+        //         if (typeof receivedSmsMessage === 'string') {
+        //             detectMessage(receivedSmsMessage, appState)
+        //         }
+        //     }
+        // }
+    }, [appState, message])
     return (
-        // <View>
-        //     <Text>{appState}</Text>
-        //     <Text></Text>
-        // </View>
-        // <Tab.Navigator>
-        //     <Tab.Screen name="Message" component={MessageScreen}></Tab.Screen>
-        //     <Tab.Screen name="Voice" component={VoiceScreen}></Tab.Screen>
-        // </Tab.Navigator>
-        <View style={{ flex: 1, backgroundColor:'#ECF87F' }}>
+        <View style={{ flex: 1, backgroundColor: '#ECF87F' }}>
             <Header />
-            <MainScreen />
+            <MainScreen handleAllow={handleAllow} allowDetect={allowDetect} />
         </View>
-
-        // <MessageScreen/>
     )
 }
 

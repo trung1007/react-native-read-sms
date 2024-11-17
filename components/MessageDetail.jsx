@@ -1,15 +1,16 @@
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const MessageDetail = ({message, spam, number, type}) => {
-  useEffect(()=>{
+  useEffect(() => {
     console.log('detail');
-    
-    console.log(spam);
-  })
 
-  const messageType = type==='message' ? "Nội dung tin nhắn" : "Nội dung cuộc gọi"
+    console.log(spam);
+  });
+
+  const messageType =
+    type === 'message' ? 'Nội dung tin nhắn' : 'Nội dung cuộc gọi';
 
   return (
     <View style={styles.container}>
@@ -31,7 +32,7 @@ const MessageDetail = ({message, spam, number, type}) => {
               source={require('../assets/img/warning_logo.png')}
             />
             <Text style={styles.message}>
-              Đoạn tin nhắn "{message}"{' '}
+              {messageType} "{message}"{' '}
               <Text style={styles.warning}>có dấu hiệu lừa đảo</Text>
             </Text>
           </View>
