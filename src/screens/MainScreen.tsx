@@ -11,10 +11,39 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const MainScreen = () => {
+// @ts-ignore
+const MainScreen = ({ handleAllow, allowDetect }) => {
 
     const [modalMessageVisible, setModalMessageVisible] = useState(false)
     const [modalVoiceVisible, setModalVoiceVisible] = useState(false);
+    const [alerAllow, setAlerAllow] = useState(false)
+
+    const showAlert = () => {
+        Alert.alert(
+            "Thông báo", // Tiêu đề thông báo
+            allowDetect ? "Ứng dụng sẽ không hoạt động trong nền" : "Cho phép ứng dụng hoạt động trong nền", // Nội dung thông báo
+            [
+                {
+                    text: "Hủy",
+                    style: "cancel", // Tùy chọn nút hủy
+                },
+                {
+                    text: "Đồng ý",
+                    onPress: () => {
+                        setAlerAllow(!alerAllow)
+                        handleAllow()
+                    },
+                }
+            ],
+            { cancelable: true } // Cho phép đóng thông báo bằng cách nhấn ngoài
+        );
+    };
+
+    const handleAlert = () => {
+        console.log("allow in main" + allowDetect);
+
+        showAlert()
+    }
 
     return (
         <View style={styles.container}>
@@ -36,7 +65,7 @@ const MainScreen = () => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.content}>
-                    <TouchableOpacity style={[styles.box]} >
+                    <TouchableOpacity style={allowDetect ? styles.unactiveBox : styles.box} onPress={handleAlert} >
                         <MaterialCommunityIcons
                             name="motion-play"
                             style={{ fontSize: 32, color: '#D2FBA4' }}
@@ -80,13 +109,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        marginTop:60
+        marginTop: 60
     },
 
     feature: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent:'space-between'
+        justifyContent: 'space-between'
 
     },
     content: {
@@ -97,6 +126,15 @@ const styles = StyleSheet.create({
     },
     box: {
         backgroundColor: '#59981A',
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    unactiveBox: {
+        backgroundColor: '#FC2E20',
         width: 80,
         height: 80,
         borderRadius: 40,
