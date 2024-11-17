@@ -19,11 +19,29 @@ const Header = () => {
 
   return (
     <View>
-      <Text style={styles.title}>Factual Spam</Text>
-      <Text>Xin chào,</Text>
-      <Text>
+      <View
+        style={{
+          paddingLeft: 20,
+          paddingRight: 20,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+        }}>
+        <Text style={styles.title}>Factual Spam</Text>
+        <Text
+          style={{
+            fontSize: 16,
+            color: '#3D550C',
+            letterSpacing: 2,
+            lineHeight: 32,
+          }}>
+          Chào mừng bạn đến với ứng dụng phát hiện tin nhắn và cuộc gọi lừa đảo
+        </Text>
+      </View>
+      {/* <Text>Xin chào,</Text> */}
+      {/* <Text >
         Chào mừng bạn đến với ứng dụng phát hiện tin nhắn và cuộc gọi lừa đảo
-      </Text>
+      </Text> */}
       <View style={{position: 'absolute', top: 8, right: 12}}>
         <TouchableOpacity
           onPress={() => {
@@ -58,43 +76,45 @@ const Header = () => {
               ứng dụng demo để trình bày về giải pháp phát hiện tin nhắn và cuộc
               gọi lừa đảo{' '}
             </Text>
-            <Text style={{textAlign: 'left', fontSize: 16, color: '#000000'}}>
+            <Text style={{textAlign: 'left', fontSize: 16, color: '#000000', marginTop:16}}>
               Dưới đây là 1 vài tính năng của ứng dụng:
             </Text>
-            <View style={{display: 'flex', flexDirection: 'column', gap: 20}}>
+            <View style={styles.features}>
               <View style={styles.feature}>
-                <View style={{width: 32}}>
+                <View style={styles.btn}>
                   <MaterialIcons
                     name="sms"
-                    style={{fontSize: 32, color: 'green'}}
+                    style={{fontSize: 28, color: '#D2FBA4'}}
                   />
                 </View>
                 <View style={{flex: 1}}>
-                  <Text style={{color:'#000000'}}>
+                  <Text style={{color: '#000000'}}>
                     Kiểm tra và phát hiện lừa đảo trong lịch sử tin nhắn của bạn
                   </Text>
                 </View>
               </View>
               <View style={styles.feature}>
-                <View style={{width: 32}}>
+                <View style={styles.btn}>
                   <FontAwesome
                     name="phone"
-                    style={{fontSize: 32, color: 'green'}}
+                    style={{fontSize: 28, color: '#F1C0B9'}}
                   />
                 </View>
                 <View style={{flex: 1}}>
-                  <Text style={{color:'#000000'}}>Minh họa phát hiện 1 cuộc gọi lừa đảo</Text>
+                  <Text style={{color: '#000000'}}>
+                    Minh họa phát hiện 1 cuộc gọi lừa đảo
+                  </Text>
                 </View>
               </View>
               <View style={styles.feature}>
-                <View style={{width: 32}}>
+                <View style={styles.btn}>
                   <MaterialCommunityIcons
                     name="motion-play"
-                    style={{fontSize: 32, color: 'green'}}
+                    style={{fontSize: 28, color: '#D2FBA4'}}
                   />
                 </View>
                 <View style={{flex: 1}}>
-                  <Text style={{color:'#000000'}}>
+                  <Text style={{color: '#000000'}}>
                     Cho phép ứng dụng phát hiện tin nhắn lừa đảo trong nền
                   </Text>
                 </View>
@@ -123,7 +143,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: width * 0.9,
-    height: height * 0.4,
+    height: height * 0.45,
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 12,
@@ -145,20 +165,39 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 48,
-    color: '#29A527',
+    letterSpacing: 2,
+    color: '#59981A',
     fontWeight: '500',
     textAlign: 'center',
+    textTransform: 'uppercase',
+    marginTop: 200,
+    borderBottomWidth: 1,
+    borderBottomColor: '#3D550C',
   },
   script: {
     textAlign: 'justify',
     fontSize: 16,
     color: '#000000',
   },
+  features: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 20,
+    marginTop: 16,
+  },
   feature: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 20,
+  },
+  btn: {
+    width: 52,
+    height: 52,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#59981A',
+    borderRadius: 26,
   },
 });
 

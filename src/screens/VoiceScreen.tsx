@@ -104,8 +104,8 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
             </View> */}
             <View style={styles.user}>
                 <View style={[styles.userInf, !isRecording && styles.userRecord]}>
-                    <Text style={styles.userName}>người gọi không xác định</Text>
-                    <Text style={styles.userNum}>+84 775313999</Text>
+                    <Text style={[styles.userName, isRecording ? { fontSize: 20 } : { fontSize: 32 }]}>người gọi không xác định</Text>
+                    <Text style={[styles.userNum, isRecording ? { fontSize: 20 } : { fontSize: 28 }]}>+84 775313999</Text>
                 </View>
                 {isRecording ? (<Image style={styles.userImg} source={require('../../assets/img/user_img.png')} />) : null}
             </View>
@@ -120,7 +120,7 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                 </View>
             ) : null} */}
 
-            <Modal
+            {result.length >> 0 ? (<Modal
                 animationType="fade"
                 transparent={true}
                 visible={messageVisible}
@@ -139,7 +139,8 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                         <MessageDetail message={result} spam={spam} number={'775 313 999'} type={'phone'} />
                     </View>
                 </View>
-            </Modal>
+            </Modal>) : null}
+
             <View style={styles.phoneControl}>
                 <View style={styles.phoneBtn}>
                     <TouchableOpacity
@@ -182,20 +183,18 @@ const styles = StyleSheet.create({
         gap: 40
     },
     userInf: {
-        gap: 12
+        gap: 12,
     },
     userRecord: {
         alignItems: 'center',
         justifyContent: 'center'
     },
     userName: {
-        fontSize: 20,
         textTransform: 'capitalize',
         color: '#ffffff'
     },
     userNum: {
         color: '#ffffff',
-        fontSize: 16,
     },
     userImg: {
         width: 120,

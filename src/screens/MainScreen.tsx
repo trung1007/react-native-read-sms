@@ -3,7 +3,13 @@ import MessageScreen from "./MessageScreen"
 import { useState } from "react";
 import VoiceScreen from "./VoiceScreen";
 // @ts-ignore
-import AntDesign  from "react-native-vector-icons/AntDesign";
+import AntDesign from "react-native-vector-icons/AntDesign";
+// @ts-ignore
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+// @ts-ignore
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+// @ts-ignore
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MainScreen = () => {
 
@@ -12,10 +18,31 @@ const MainScreen = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.content}>
-                <TouchableOpacity style={[styles.box]} onPress={() => { setModalMessageVisible(true) }}>
-                    <Text style={[styles.text]}>Lịch sử tin nhắn</Text>
-                </TouchableOpacity>
+            <View style={styles.feature}>
+                <View style={styles.content}>
+                    <TouchableOpacity style={[styles.box]} onPress={() => { setModalMessageVisible(true) }}>
+                        <MaterialIcons
+                            name="sms"
+                            style={{ fontSize: 32, color: '#D2FBA4' }}
+                        />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.content}>
+                    <TouchableOpacity style={[styles.box]} onPress={() => { setModalVoiceVisible(true) }}>
+                        <FontAwesome
+                            name="phone"
+                            style={{ fontSize: 32, color: '#F1C0B9' }}
+                        />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.content}>
+                    <TouchableOpacity style={[styles.box]} >
+                        <MaterialCommunityIcons
+                            name="motion-play"
+                            style={{ fontSize: 32, color: '#D2FBA4' }}
+                        />
+                    </TouchableOpacity>
+                </View>
             </View>
             <Modal
                 animationType="slide"
@@ -29,17 +56,12 @@ const MainScreen = () => {
                         <TouchableOpacity
                             style={styles.button}
                             onPress={() => setModalMessageVisible(false)}>
-                            <AntDesign name='down' style={{fontSize:16, color:'#ffffff'}} />
+                            <AntDesign name='down' style={{ fontSize: 16, color: '#ffffff' }} />
                             {/* <Text style={styles.textStyle}>Xong</Text> */}
                         </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
-            <View style={styles.content}>
-                <TouchableOpacity style={[styles.box]} onPress={() => { setModalVoiceVisible(true) }}>
-                    <Text style={[styles.text]}>Mở cuộc ghi âm</Text>
-                </TouchableOpacity>
-            </View>
             <Modal
                 animationType="slide"
                 visible={modalVoiceVisible}
@@ -49,11 +71,6 @@ const MainScreen = () => {
                 }}>
                 <VoiceScreen onClose={() => { setModalVoiceVisible(false) }} />
             </Modal>
-            <View style={styles.content}>
-                <TouchableOpacity style={[styles.box]} >
-                    <Text style={[styles.text]}>Cho phép ứng dụng phát hiện tin nhắn lừa đảo</Text>
-                </TouchableOpacity>
-            </View>
         </View>
     )
 
@@ -62,7 +79,15 @@ const MainScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20
+        padding: 20,
+        marginTop:60
+    },
+
+    feature: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent:'space-between'
+
     },
     content: {
         display: 'flex',
@@ -71,13 +96,13 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     box: {
-        backgroundColor: 'green',
-        padding: 12,
-        borderRadius: 12,
-        width: 'auto',
-        height: 48,
+        backgroundColor: '#59981A',
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        padding: 10,
+        justifyContent: 'center',
         alignItems: 'center',
-        justifyContent: 'center'
     },
     text: {
         color: 'white',

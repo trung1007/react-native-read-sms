@@ -107,7 +107,7 @@ const Layout = () => {
         //     <Tab.Screen name="Message" component={MessageScreen}></Tab.Screen>
         //     <Tab.Screen name="Voice" component={VoiceScreen}></Tab.Screen>
         // </Tab.Navigator>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor:'#ECF87F' }}>
             <Header />
             <MainScreen />
         </View>
