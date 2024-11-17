@@ -49,6 +49,12 @@ const MessageBox = ({message, spam, number}) => {
         }}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
+            <MessageDetail
+              message={message}
+              spam={spam}
+              number={number}
+              type={'message'}
+            />
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => {
@@ -56,7 +62,6 @@ const MessageBox = ({message, spam, number}) => {
               }}>
               <Text style={styles.closeText}>Đóng</Text>
             </TouchableOpacity>
-            <MessageDetail message={message} spam={spam} number={number} type={'message'} />
           </View>
         </View>
       </Modal>
@@ -109,9 +114,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   closeButton: {
-    position:'absolute',
-    right:12,
-    top:12
+    position: 'absolute',
+    right: 12,
+    top: 12,
   },
   closeText: {
     color: '#007BFF',

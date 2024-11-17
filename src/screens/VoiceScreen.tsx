@@ -160,7 +160,6 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                     <Text style={styles.textStyle}>Chấp Nhận</Text>
                 </View>) : null}
             </View>
-
         </View>
     )
 }
