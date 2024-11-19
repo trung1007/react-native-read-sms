@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Arrays; // Import Arrays for combining packages
 import com.facebook.react.ReactNativeHost; // Import ReactNativeHost
 import com.facebook.react.ReactApplication; // Import ReactApplication
-// import com.react_native_read_sms.SmsListenerPackage; // Import your custom package
+import com.react_native_read_sms.SmsListenerPackage; // Import your custom package
 import com.rnfs.RNFSPackage; // <------- add package
 import com.wenkesj.voice.VoicePackage; // add VoicePackage
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage; // add NotificationPackage
@@ -35,7 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
             // Get the autolinked packages
             return Arrays.<ReactPackage>asList(
                 new MainReactPackage(), // Include the main React package
-                // new SmsListenerPackage(), // Add your custom package
+                new SmsListenerPackage(), // Add your custom package
                 new RNFSPackage(),
                 new VoicePackage(),
                 new ReactNativePushNotificationPackage(),

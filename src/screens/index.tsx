@@ -92,8 +92,8 @@ const Layout = () => {
     useEffect(() => {
         if(!allowDetect && appState === 'background'){
             console.log("ứng dụng chưa thể detect trong nền");
-            
         }
+        console.log(receivedSmsMessage);
         
         if (allowDetect &&  appState === 'background') {
             console.log("có thể detect trong nền");
@@ -111,7 +111,7 @@ const Layout = () => {
         //         }
         //     }
         // }
-    }, [appState, message])
+    }, [appState, message, receivedSmsMessage])
     return (
         <View style={{ flex: 1, backgroundColor: '#ECF87F' }}>
             <Header />
