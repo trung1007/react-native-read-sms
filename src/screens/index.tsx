@@ -15,6 +15,7 @@ import VoiceScreen from "./VoiceScreen"
 import MainScreen from "./MainScreen"
 import Header from "../../components/Header"
 import usePermission from "../../hook/usePermision"
+import Colors from '../../common/var'
 
 const Tab = createBottomTabNavigator();
 
@@ -113,7 +114,7 @@ const Layout = () => {
         // }
     }, [appState, message, receivedSmsMessage])
     return (
-        <View style={{ flex: 1, backgroundColor: '#ECF87F' }}>
+        <View style={{ flex: 1, backgroundColor: Colors.background }}>
             <Header />
             <MainScreen handleAllow={handleAllow} allowDetect={allowDetect} />
         </View>

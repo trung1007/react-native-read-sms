@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Modal, Pressable, TouchableOpacity, Alert } from "react-native"
 import MessageScreen from "./MessageScreen"
 import { useState } from "react";
+import Colors from '../../common/var'
 import VoiceScreen from "./VoiceScreen";
 // @ts-ignore
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -52,7 +53,7 @@ const MainScreen = ({ handleAllow, allowDetect }) => {
                     <TouchableOpacity style={[styles.box]} onPress={() => { setModalMessageVisible(true) }}>
                         <MaterialIcons
                             name="sms"
-                            style={{ fontSize: 32, color: '#D2FBA4' }}
+                            style={{ fontSize: 32, color: Colors.btnFeat }}
                         />
                     </TouchableOpacity>
                 </View>
@@ -60,7 +61,7 @@ const MainScreen = ({ handleAllow, allowDetect }) => {
                     <TouchableOpacity style={[styles.box]} onPress={() => { setModalVoiceVisible(true) }}>
                         <FontAwesome
                             name="phone"
-                            style={{ fontSize: 32, color: '#F1C0B9' }}
+                            style={{ fontSize: 32, color: Colors.btnFeat}}
                         />
                     </TouchableOpacity>
                 </View>
@@ -68,7 +69,7 @@ const MainScreen = ({ handleAllow, allowDetect }) => {
                     <TouchableOpacity style={allowDetect ? styles.unactiveBox : styles.box} onPress={handleAlert} >
                         <MaterialCommunityIcons
                             name="motion-play"
-                            style={{ fontSize: 32, color: '#D2FBA4' }}
+                            style={{ fontSize: 32, color: Colors.btnFeat }}
                         />
                     </TouchableOpacity>
                 </View>
@@ -125,7 +126,8 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     box: {
-        backgroundColor: '#59981A',
+        // backgroundColor: '#59981A',
+        backgroundColor:Colors.btnBg,
         width: 80,
         height: 80,
         borderRadius: 40,

@@ -13,6 +13,8 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import FakeBtnGroup from "../../components/FakeBtn";
 import LocalNotification from "../../LocalNotification";
 import MessageDetail from "../../components/MessageDetail";
+import { ratioW, ratioH } from "../../utils/convertUI";
+import Colors from '../../common/var'
 
 const { width, height } = Dimensions.get('window');
 
@@ -65,20 +67,20 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
             }
         };
         Voice.onSpeechPartialResults = async (e) => {
-            // console.log("Partial speech results:", e.value);
-            // setResult((e.value ? e.value[0] : '') + '...'); // Update state with partial recognized text
-            // try {
-            //     const prediction = await detectSpam(e.value ? e.value[0] : '')
-            //     console.log(prediction.spam);
-            //     console.log(e.value ? e.value[0] : '');
-            //     if (prediction.spam) {
-            //         setIsRecording(false);
-            //         Voice.stop();
-            //         LocalNotification(e.value ? e.value[0] : '')
-            //     }
-            // } catch (error) {
-            //     console.log(error);
-            // }
+            console.log("Partial speech results:", e.value);
+            setResult((e.value ? e.value[0] : '') + '...'); // Update state with partial recognized text
+            try {
+                const prediction = await detectSpam(e.value ? e.value[0] : '')
+                console.log(prediction.spam);
+                console.log(e.value ? e.value[0] : '');
+                if (prediction.spam) {
+                    // setIsRecording(false);
+                    // Voice.stop();
+                    LocalNotification(e.value ? e.value[0] : '')
+                }
+            } catch (error) {
+                console.log(error);
+            }
         };
         Voice.onSpeechError = (e) => {
             console.log("Speech error:", e);
@@ -114,12 +116,6 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                     <FakeBtnGroup />
                 </View>
             ) : null}
-            {/* {messageVisible ? (
-                <View>
-                    <Text>Nội dung cuộc gọi: {result}</Text>
-                </View>
-            ) : null} */}
-
             {result.length >> 0 ? (<Modal
                 animationType="fade"
                 transparent={true}
@@ -197,8 +193,8 @@ const styles = StyleSheet.create({
         color: '#ffffff',
     },
     userImg: {
-        width: 120,
-        height: 120,
+        width: ratioW(120),
+        height: ratioH(120),
         borderRadius: 60,
         borderWidth: 1,
         borderColor: '#ffffff'

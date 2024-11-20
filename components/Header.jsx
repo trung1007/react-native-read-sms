@@ -11,6 +11,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Colors from '../common/var';
 
 const {width, height} = Dimensions.get('window');
 
@@ -31,11 +32,13 @@ const Header = () => {
         <Text
           style={{
             fontSize: 16,
-            color: '#3D550C',
+            fontWeight:'600',
+            // color: '#3D550C',
+            color: Colors.subTitle,
             letterSpacing: 2,
             lineHeight: 32,
           }}>
-          Chào mừng bạn đến với ứng dụng phát hiện tin nhắn và cuộc gọi lừa đảo
+          Chào mừng bạn đến với ứng dụng phát hiện <Text style={{color:Colors.title}}>tin nhắn và cuộc gọi lừa đảo</Text> 
         </Text>
       </View>
       {/* <Text>Xin chào,</Text> */}
@@ -65,18 +68,24 @@ const Header = () => {
             <Text
               style={{
                 fontSize: 24,
-                color: '#29A527',
+                color: Colors.title,
                 fontWeight: '500',
                 textAlign: 'center',
               }}>
               Factual Spam
             </Text>
             <Text style={styles.script}>
-              Ứng dụng <Text style={{color: '#29A527'}}>Factual Spam</Text> là 1
+              Ứng dụng <Text style={{color: Colors.title}}>Factual Spam</Text> là 1
               ứng dụng demo để trình bày về giải pháp phát hiện tin nhắn và cuộc
               gọi lừa đảo{' '}
             </Text>
-            <Text style={{textAlign: 'left', fontSize: 16, color: '#000000', marginTop:16}}>
+            <Text
+              style={{
+                textAlign: 'left',
+                fontSize: 16,
+                color: '#000000',
+                marginTop: 16,
+              }}>
               Dưới đây là 1 vài tính năng của ứng dụng:
             </Text>
             <View style={styles.features}>
@@ -84,7 +93,7 @@ const Header = () => {
                 <View style={styles.btn}>
                   <MaterialIcons
                     name="sms"
-                    style={{fontSize: 28, color: '#D2FBA4'}}
+                    style={{fontSize: 28, color: Colors.btnFeat}}
                   />
                 </View>
                 <View style={{flex: 1}}>
@@ -97,7 +106,7 @@ const Header = () => {
                 <View style={styles.btn}>
                   <FontAwesome
                     name="phone"
-                    style={{fontSize: 28, color: '#F1C0B9'}}
+                    style={{fontSize: 28, color: Colors.btnFeat}}
                   />
                 </View>
                 <View style={{flex: 1}}>
@@ -110,7 +119,7 @@ const Header = () => {
                 <View style={styles.btn}>
                   <MaterialCommunityIcons
                     name="motion-play"
-                    style={{fontSize: 28, color: '#D2FBA4'}}
+                    style={{fontSize: 28, color: Colors.btnFeat}}
                   />
                 </View>
                 <View style={{flex: 1}}>
@@ -166,13 +175,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 48,
     letterSpacing: 2,
-    color: '#59981A',
-    fontWeight: '500',
+    // color: '#59981A',
+    color: Colors.title,
+    fontWeight: '600',
     textAlign: 'center',
     textTransform: 'uppercase',
     marginTop: 200,
     borderBottomWidth: 1,
-    borderBottomColor: '#3D550C',
+    borderBottomColor: Colors.title,
   },
   script: {
     textAlign: 'justify',
@@ -196,7 +206,7 @@ const styles = StyleSheet.create({
     height: 52,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#59981A',
+    backgroundColor: Colors.btnBg,
     borderRadius: 26,
   },
 });
