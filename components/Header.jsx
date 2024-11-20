@@ -32,13 +32,16 @@ const Header = () => {
         <Text
           style={{
             fontSize: 16,
-            fontWeight:'600',
+            fontWeight: '600',
             // color: '#3D550C',
             color: Colors.subTitle,
             letterSpacing: 2,
             lineHeight: 32,
           }}>
-          Chào mừng bạn đến với ứng dụng phát hiện <Text style={{color:Colors.title}}>tin nhắn và cuộc gọi lừa đảo</Text> 
+          Chào mừng bạn đến với ứng dụng phát hiện{' '}
+          <Text style={{color: Colors.title}}>
+            tin nhắn và cuộc gọi lừa đảo
+          </Text>
         </Text>
       </View>
       {/* <Text>Xin chào,</Text> */}
@@ -52,7 +55,7 @@ const Header = () => {
           }}>
           <AntDesign
             name="infocirlceo"
-            style={{fontSize: 32, color: '#29A527'}}
+            style={{fontSize: 32, color: Colors.title}}
           />
         </TouchableOpacity>
       </View>
@@ -71,20 +74,24 @@ const Header = () => {
                 color: Colors.title,
                 fontWeight: '500',
                 textAlign: 'center',
+                marginBottom: 16,
+                letterSpacing: 2,
               }}>
               Factual Spam
             </Text>
             <Text style={styles.script}>
-              Ứng dụng <Text style={{color: Colors.title}}>Factual Spam</Text> là 1
-              ứng dụng demo để trình bày về giải pháp phát hiện tin nhắn và cuộc
-              gọi lừa đảo{' '}
+              Ứng dụng <Text style={{color: Colors.title}}>Factual Spam</Text>{' '}
+              là 1 ứng dụng demo để trình bày về giải pháp phát hiện tin nhắn và
+              cuộc gọi lừa đảo{' '}
             </Text>
             <Text
               style={{
-                textAlign: 'left',
+                textAlign: 'justify',
                 fontSize: 16,
                 color: '#000000',
                 marginTop: 16,
+                letterSpacing: 1,
+                lineHeight: 28,
               }}>
               Dưới đây là 1 vài tính năng của ứng dụng:
             </Text>
@@ -93,11 +100,11 @@ const Header = () => {
                 <View style={styles.btn}>
                   <MaterialIcons
                     name="sms"
-                    style={{fontSize: 28, color: Colors.btnFeat}}
+                    style={{fontSize: 32, color: Colors.btnFeat}}
                   />
                 </View>
                 <View style={{flex: 1}}>
-                  <Text style={{color: '#000000'}}>
+                  <Text style={styles.script}>
                     Kiểm tra và phát hiện lừa đảo trong lịch sử tin nhắn của bạn
                   </Text>
                 </View>
@@ -106,11 +113,11 @@ const Header = () => {
                 <View style={styles.btn}>
                   <FontAwesome
                     name="phone"
-                    style={{fontSize: 28, color: Colors.btnFeat}}
+                    style={{fontSize: 32, color: Colors.btnFeat}}
                   />
                 </View>
                 <View style={{flex: 1}}>
-                  <Text style={{color: '#000000'}}>
+                  <Text style={styles.script}>
                     Minh họa phát hiện 1 cuộc gọi lừa đảo
                   </Text>
                 </View>
@@ -119,11 +126,11 @@ const Header = () => {
                 <View style={styles.btn}>
                   <MaterialCommunityIcons
                     name="motion-play"
-                    style={{fontSize: 28, color: Colors.btnFeat}}
+                    style={{fontSize: 32, color: Colors.btnFeat}}
                   />
                 </View>
                 <View style={{flex: 1}}>
-                  <Text style={{color: '#000000'}}>
+                  <Text style={styles.script}>
                     Cho phép ứng dụng phát hiện tin nhắn lừa đảo trong nền
                   </Text>
                 </View>
@@ -152,7 +159,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: width * 0.9,
-    height: height * 0.45,
+    height: height * 0.6,
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 12,
@@ -185,14 +192,16 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.title,
   },
   script: {
-    textAlign: 'justify',
     fontSize: 16,
+    lineHeight: 28,
+    letterSpacing: 1,
+    textAlign: 'justify',
     color: '#000000',
   },
   features: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 20,
+    gap: 24,
     marginTop: 16,
   },
   feature: {
@@ -202,12 +211,12 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   btn: {
-    width: 52,
-    height: 52,
+    width: 60,
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.btnBg,
-    borderRadius: 26,
+    borderRadius: 30,
   },
 });
 
