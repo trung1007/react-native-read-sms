@@ -11,6 +11,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import VoiceSocketScreen from "./VoiceSocketScreen";
 
 // @ts-ignore
 const MainScreen = ({ handleAllow, allowDetect }) => {
@@ -99,7 +100,9 @@ const MainScreen = ({ handleAllow, allowDetect }) => {
                     Alert.alert('Modal has been closed.');
                     setModalVoiceVisible(!modalVoiceVisible);
                 }}>
-                <VoiceScreen onClose={() => { setModalVoiceVisible(false) }} />
+                {/* <VoiceScreen onClose={() => { setModalVoiceVisible(false) }} /> */}
+                <VoiceSocketScreen/>
+
             </Modal>
         </View>
     )

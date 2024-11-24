@@ -1,21 +1,11 @@
-import { Text, View, StyleSheet, Pressable, Image, TouchableOpacity, PermissionsAndroid, ToastAndroid, Platform, Modal, Dimensions } from "react-native"
-import VoiceRecord from "../voiceRecord"
-// @ts-ignore
-import Ionicons from "react-native-vector-icons/Ionicons";
+import React, { useEffect, useState, useRef } from 'react';
+import { StyleSheet, Text, View, Button, TouchableOpacity, Modal, Dimensions } from 'react-native';
+import io, { Socket } from 'socket.io-client';
 // @ts-ignore
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import Voice from '@react-native-voice/voice';
-import { useEffect, useState } from "react";
-import requestPermission from "../../utils/requestPermision";
-import { detectSpam } from "../../utils/detectSpam";
 // @ts-ignore
-import AntDesign from "react-native-vector-icons/AntDesign";
-import FakeBtnGroup from "../../components/FakeBtn";
-import LocalNotification from "../../LocalNotification";
-import MessageDetail from "../../components/MessageDetail";
-import { ratioW, ratioH } from "../../utils/convertUI";
-import Colors from '../../common/var'
-import io, { Socket } from 'socket.io-client';
+import Ionicons from "react-native-vector-icons/Ionicons";
+import FakeBtnGroup from '../../components/FakeBtn';
 
 // Replace with your Flask server URL
 const SOCKET_SERVER_URL = 'http://10.0.2.2:5000';
@@ -23,87 +13,57 @@ const SOCKET_SERVER_URL = 'http://10.0.2.2:5000';
 const { width, height } = Dimensions.get('window');
 
 
-type ModalContentProps = {
-    onClose: () => void; // Hàm được truyền vào để đóng modal
-};
+const VoiceSocketScreen = () => {
+    const [data, setData] = useState<any>(null);
+    const [isConnected, setIsConnected] = useState<boolean>(false);
+    const socketRef = useRef<Socket | null>(null); // Use ref to persist socket instance
 
-const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
-    const [isRecording, setIsRecording] = useState(false);
-    const [result, setResult] = useState("");
-    const [messageVisible, setMessageVisible] = useState(false)
-    const [spam, setSpam] = useState<{ spam?: boolean }>({ spam: false })
+    const connectToServer = () => {
+        if (socketRef.current) {
+            console.log('Already connected to server');
+            return;
+        }
 
-    // Start recording
-    const startRecording = async () => {
-        const permissionGranted = await requestPermission();
-        if (permissionGranted) {
-            setIsRecording(true);
-            Voice.start('en-US'); // Start the voice recognition
-            // Voice.start('vi-VN'); // Start the voice recognition
+        const socket = io(SOCKET_SERVER_URL);
+
+        socket.on('connect', () => {
+            console.log('Connected to the server');
+            setIsConnected(true);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from the server');
+            setIsConnected(false);
+        });
+
+        socket.on('update_text', (message) => {
+            console.log('Received update:', message);
+            setData(message);
+        });
+
+        socketRef.current = socket; // Save socket instance
+    };
+
+    const disconnectFromServer = () => {
+        if (socketRef.current) {
+            socketRef.current.disconnect();
+            socketRef.current = null;
+            console.log('Disconnected from server');
+            setData(null); // Clear old data when disconnected
+        } else {
+            console.log('No active connection to disconnect');
         }
     };
 
-    // Stop recording
-    const handleStopRecording = () => {
-        setMessageVisible(true)
-        setIsRecording(false);
-        Voice.stop(); // Stop the voice recognition
-        // onClose()
-        if (!isRecording) {
-            onClose()
-        }
-    };
-
-    const handleVoice = () => {
-        setMessageVisible(false)
-        // Setup Voice event listeners
-        Voice.onSpeechStart = () => console.log("Speech recognition started");
-        Voice.onSpeechEnd = () => console.log("Speech recognition ended");
-        Voice.onSpeechResults = async (e) => {
-            console.log("Final speech results:", e.value);
-            setResult(e.value ? e.value[0] : ''); // Update state with final recognized text
-            try {
-                const prediction = await detectSpam(e.value ? e.value[0] : '')
-                console.log('voiceScreen');
-                console.log(prediction);
-                setSpam(prediction)
-            } catch (error) {
-                console.log(error);
+    useEffect(() => {
+        // Clean up socket connection on unmount
+        return () => {
+            if (socketRef.current) {
+                socketRef.current.disconnect();
+                socketRef.current = null;
             }
         };
-        Voice.onSpeechPartialResults = async (e) => {
-            console.log("Partial speech results:", e.value);
-            setResult((e.value ? e.value[0] : '') + '...'); // Update state with partial recognized text
-            // try {
-            //     const prediction = await detectSpam(e.value ? e.value[0] : '')
-            //     console.log(prediction.spam);
-            //     console.log(e.value ? e.value[0] : '');
-            //     if (prediction.spam) {
-            //         // setIsRecording(false);
-            //         // Voice.stop();
-            //         // LocalNotification(e.value ? e.value[0] : '')
-            //     }
-            // } catch (error) {
-            //     console.log(error);
-            // }
-            
-        };
-        Voice.onSpeechError = (e) => {
-            console.log("Speech error:", e);
-        };
-
-        // Cleanup on unmount
-        return () => {
-            Voice.destroy().then(Voice.removeAllListeners);
-        };
-    }
-
-    // Setup event listeners for speech recognition events
-    useEffect(() => {
-        const voiceListener = handleVoice()
-        return voiceListener
     }, []);
-
 
     return (
         <View style={styles.container}>
@@ -111,18 +71,35 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                
             </View> */}
             <View style={styles.user}>
-                <View style={[styles.userInf, !isRecording && styles.userRecord]}>
-                    <Text style={[styles.userName, isRecording ? { fontSize: 20 } : { fontSize: 32 }]}>người gọi không xác định</Text>
-                    <Text style={[styles.userNum, isRecording ? { fontSize: 20 } : { fontSize: 28 }]}>+84 775313999</Text>
+                <View style={[styles.userInf]}>
+                    <Text style={[styles.userName, { fontSize: 32 }]}>người gọi không xác định</Text>
+                    <Text style={[styles.userNum, { fontSize: 28 }]}>+84 775313999</Text>
                 </View>
-                {isRecording ? (<Image style={styles.userImg} source={require('../../assets/img/user_img.png')} />) : null}
+                {/* {isRecording ? (<Image style={styles.userImg} source={require('../../assets/img/user_img.png')} />) : null} */}
             </View>
-            {isRecording ? (
+            <Text style={styles.title}>Real-time Server Data</Text>
+            <Text style={styles.text}>
+                Status: {isConnected ? 'Connected' : 'Disconnected'}
+            </Text>
+            {data ? (
+                <View>
+                    <Text style={styles.text}>Received Text: {data.received_text}</Text>
+                    <Text style={styles.text}>
+                        Timestamp: {new Date(data.timestamp * 1000).toLocaleString()}
+                    </Text>
+                </View>
+            ) : (
+                <Text style={styles.text}>Waiting for data...</Text>
+            )}
+            <View>
+                <FakeBtnGroup />
+            </View>
+            {/* {isRecording ? (
                 <View>
                     <FakeBtnGroup />
                 </View>
-            ) : null}
-            {result.length >> 0 ? (<Modal
+            ) : null} */}
+            {/* {result.length >> 0 ? (<Modal
                 animationType="fade"
                 transparent={true}
                 visible={messageVisible}
@@ -141,19 +118,28 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                         <MessageDetail message={result} spam={spam} number={'775 313 999'} type={'phone'} />
                     </View>
                 </View>
-            </Modal>) : null}
+            </Modal>) : null} */}
 
             <View style={styles.phoneControl}>
                 <View style={styles.phoneBtn}>
                     <TouchableOpacity
-                        onPress={handleStopRecording}
+                        onPress={disconnectFromServer}
                         style={[styles.button, styles.reject]}
                     >
                         <MaterialCommunityIcons name="phone-hangup" style={{ color: '#ffffff', fontSize: 40 }} />
                     </TouchableOpacity>
                     <Text style={styles.textStyle}>Từ chối</Text>
                 </View>
-                {!isRecording ? (<View style={styles.phoneBtn}>
+                <View style={styles.phoneBtn}>
+                    <TouchableOpacity
+                        onPress={connectToServer}
+                        style={[styles.button, styles.accept]}
+                    >
+                        <Ionicons name="call" style={{ color: '#ffffff', fontSize: 40 }} />
+                    </TouchableOpacity>
+                    <Text style={styles.textStyle}>Chấp Nhận</Text>
+                </View>
+                {/* {!isRecording ? (<View style={styles.phoneBtn}>
                     <TouchableOpacity
                         onPress={isRecording ? handleStopRecording : startRecording}
                         style={[styles.button, styles.accept]}
@@ -161,11 +147,11 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                         <Ionicons name="call" style={{ color: '#ffffff', fontSize: 40 }} />
                     </TouchableOpacity>
                     <Text style={styles.textStyle}>Chấp Nhận</Text>
-                </View>) : null}
+                </View>) : null} */}
             </View>
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -177,6 +163,17 @@ const styles = StyleSheet.create({
         paddingBottom: 80,
         paddingLeft: 12,
         paddingRight: 12
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        color:'#ffffff'
+    },
+    text: {
+        fontSize: 18,
+        marginVertical: 5,
+        color:'#ffffff'
     },
     user: {
         display: 'flex',
@@ -274,4 +271,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default VoiceScreen
+export default VoiceSocketScreen;
