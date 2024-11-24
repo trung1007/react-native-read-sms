@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity, Modal, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, Modal, Dimensions, Image } from 'react-native';
 import io, { Socket } from 'socket.io-client';
 // @ts-ignore
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -24,6 +24,8 @@ const VoiceSocketScreen: React.FC<VoiceSocketModal> = ({ onClose }) => {
     const socketRef = useRef<Socket | null>(null); // Use ref to persist socket instance
 
     const connectToServer = () => {
+        console.log(data);
+        
         if (socketRef.current) {
             console.log('Already connected to server');
             return;
@@ -50,11 +52,13 @@ const VoiceSocketScreen: React.FC<VoiceSocketModal> = ({ onClose }) => {
     };
 
     const disconnectFromServer = () => {
+        setData(null);
         if (socketRef.current) {
             socketRef.current.disconnect();
             socketRef.current = null;
             console.log('Disconnected from server');
-            setData(null); // Clear old data when disconnected
+            // Clear old data when disconnected
+            setData(null);
         } else {
             console.log('No active connection to disconnect');
         }
@@ -67,6 +71,7 @@ const VoiceSocketScreen: React.FC<VoiceSocketModal> = ({ onClose }) => {
                 socketRef.current.disconnect();
                 socketRef.current = null;
             }
+            setData(null);
         };
     }, []);
 
@@ -89,32 +94,24 @@ const VoiceSocketScreen: React.FC<VoiceSocketModal> = ({ onClose }) => {
 
     return (
         <View style={styles.container}>
-            {/* <View style={styles.modalView}>
-               
-            </View> */}
             <View style={styles.user}>
-                <View style={[styles.userInf]}>
-                    <Text style={[styles.userName, { fontSize: 32 }]}>người gọi không xác định</Text>
-                    <Text style={[styles.userNum, { fontSize: 28 }]}>+84 775313999</Text>
+                <View style={[styles.userInf, !isConnected && styles.userRecord]}>
+                    <Text style={[styles.userName, isConnected ? { fontSize: 20 } : { fontSize: 32 }]}>người gọi không xác định</Text>
+                    <Text style={[styles.userNum, isConnected ? { fontSize: 20 } : { fontSize: 28 }]}>+84 775313999</Text>
                 </View>
-                {/* {isRecording ? (<Image style={styles.userImg} source={require('../../assets/img/user_img.png')} />) : null} */}
+                {isConnected ? (<Image style={styles.userImg} source={require('../../assets/img/user_img.png')} />) : null}
             </View>
-            {!isConnected ? (<View>
-                <Text style={styles.title}>Real-time Server Data</Text>
-                <Text style={styles.text}>
-                    Status: {isConnected ? 'Connected' : 'Disconnected'}
-                </Text>
-                {data ? (
-                    <View>
-                        <Text style={styles.text}>Received Text: {data.received_text}</Text>
-                        <Text style={styles.text}>
-                            Timestamp: {new Date(data.timestamp * 1000).toLocaleString()}
-                        </Text>
-                    </View>
-                ) : (
-                    <Text style={styles.text}>Waiting for data...</Text>
-                )}
-            </View>) : null}
+
+            {data ? (
+                <View>
+                    <Text style={styles.text}>Received Text: {data.received_text}</Text>
+                    <Text style={styles.text}>
+                        Timestamp: {new Date(data.timestamp * 1000).toLocaleString()}
+                    </Text>
+                </View>
+            ) : (
+                <Text style={styles.text}>Waiting for data...</Text>
+            )}
 
 
             {isConnected ? (
@@ -122,27 +119,6 @@ const VoiceSocketScreen: React.FC<VoiceSocketModal> = ({ onClose }) => {
                     <FakeBtnGroup />
                 </View>
             ) : null}
-            {/* {result.length >> 0 ? (<Modal
-                animationType="fade"
-                transparent={true}
-                visible={messageVisible}
-                onRequestClose={() => {
-                    setMessageVisible(false)
-                }}>
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalContent}>
-                        <TouchableOpacity
-                            style={styles.closeButton}
-                            onPress={() => {
-                                setMessageVisible(false)
-                            }}>
-                            <Text style={styles.closeText}>Đóng</Text>
-                        </TouchableOpacity>
-                        <MessageDetail message={result} spam={spam} number={'775 313 999'} type={'phone'} />
-                    </View>
-                </View>
-            </Modal>) : null} */}
-
             <View style={styles.phoneControl}>
                 <View style={styles.phoneBtn}>
                     <TouchableOpacity
@@ -153,15 +129,6 @@ const VoiceSocketScreen: React.FC<VoiceSocketModal> = ({ onClose }) => {
                     </TouchableOpacity>
                     <Text style={styles.textStyle}>Từ chối</Text>
                 </View>
-                {/* <View style={styles.phoneBtn}>
-                    <TouchableOpacity
-                        onPress={connectToServer}
-                        style={[styles.button, styles.accept]}
-                    >
-                        <Ionicons name="call" style={{ color: '#ffffff', fontSize: 40 }} />
-                    </TouchableOpacity>
-                    <Text style={styles.textStyle}>Chấp Nhận</Text>
-                </View> */}
                 {!isConnected ? (<View style={styles.phoneBtn}>
                     <TouchableOpacity
                         onPress={isConnected ? handleStopVoice : connectToServer}

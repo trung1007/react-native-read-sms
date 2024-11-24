@@ -103,15 +103,15 @@ const Layout = () => {
                 detectMessage(message, appState)
             }
         }
-        // if (appState === 'active') {
-        //     stopBackgroundService()
-        //     if (receivedSmsMessage !== null) {
-        //         console.log(receivedSmsMessage);
-        //         if (typeof receivedSmsMessage === 'string') {
-        //             detectMessage(receivedSmsMessage, appState)
-        //         }
-        //     }
-        // }
+        if (appState === 'active') {
+            stopBackgroundService()
+            if (receivedSmsMessage !== null) {
+                console.log(receivedSmsMessage);
+                if (typeof receivedSmsMessage === 'string') {
+                    detectMessage(receivedSmsMessage, appState)
+                }
+            }
+        }
     }, [appState, message, receivedSmsMessage])
     return (
         <View style={{ flex: 1, backgroundColor: Colors.background }}>
