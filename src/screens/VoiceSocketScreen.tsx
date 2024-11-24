@@ -13,7 +13,12 @@ const SOCKET_SERVER_URL = 'http://10.0.2.2:5000';
 const { width, height } = Dimensions.get('window');
 
 
-const VoiceSocketScreen = () => {
+type VoiceSocketModal = {
+    onClose: () => void; // Hàm được truyền vào để đóng modal
+};
+
+
+const VoiceSocketScreen: React.FC<VoiceSocketModal> = ({ onClose }) => {
     const [data, setData] = useState<any>(null);
     const [isConnected, setIsConnected] = useState<boolean>(false);
     const socketRef = useRef<Socket | null>(null); // Use ref to persist socket instance
@@ -65,6 +70,23 @@ const VoiceSocketScreen = () => {
         };
     }, []);
 
+    const handleStopRecording = () => {
+        // setMessageVisible(true)
+        setIsConnected(false)
+        // onClose()
+        if (!isConnected) {
+            onClose()
+        }
+    };
+    const handleStopVoice = () => {
+        if (!isConnected) {
+            onClose()
+        }
+        else {
+            disconnectFromServer()
+        }
+    }
+
     return (
         <View style={styles.container}>
             {/* <View style={styles.modalView}>
@@ -77,28 +99,29 @@ const VoiceSocketScreen = () => {
                 </View>
                 {/* {isRecording ? (<Image style={styles.userImg} source={require('../../assets/img/user_img.png')} />) : null} */}
             </View>
-            <Text style={styles.title}>Real-time Server Data</Text>
-            <Text style={styles.text}>
-                Status: {isConnected ? 'Connected' : 'Disconnected'}
-            </Text>
-            {data ? (
-                <View>
-                    <Text style={styles.text}>Received Text: {data.received_text}</Text>
-                    <Text style={styles.text}>
-                        Timestamp: {new Date(data.timestamp * 1000).toLocaleString()}
-                    </Text>
-                </View>
-            ) : (
-                <Text style={styles.text}>Waiting for data...</Text>
-            )}
-            <View>
-                <FakeBtnGroup />
-            </View>
-            {/* {isRecording ? (
+            {!isConnected ? (<View>
+                <Text style={styles.title}>Real-time Server Data</Text>
+                <Text style={styles.text}>
+                    Status: {isConnected ? 'Connected' : 'Disconnected'}
+                </Text>
+                {data ? (
+                    <View>
+                        <Text style={styles.text}>Received Text: {data.received_text}</Text>
+                        <Text style={styles.text}>
+                            Timestamp: {new Date(data.timestamp * 1000).toLocaleString()}
+                        </Text>
+                    </View>
+                ) : (
+                    <Text style={styles.text}>Waiting for data...</Text>
+                )}
+            </View>) : null}
+
+
+            {isConnected ? (
                 <View>
                     <FakeBtnGroup />
                 </View>
-            ) : null} */}
+            ) : null}
             {/* {result.length >> 0 ? (<Modal
                 animationType="fade"
                 transparent={true}
@@ -123,14 +146,14 @@ const VoiceSocketScreen = () => {
             <View style={styles.phoneControl}>
                 <View style={styles.phoneBtn}>
                     <TouchableOpacity
-                        onPress={disconnectFromServer}
+                        onPress={handleStopVoice}
                         style={[styles.button, styles.reject]}
                     >
                         <MaterialCommunityIcons name="phone-hangup" style={{ color: '#ffffff', fontSize: 40 }} />
                     </TouchableOpacity>
                     <Text style={styles.textStyle}>Từ chối</Text>
                 </View>
-                <View style={styles.phoneBtn}>
+                {/* <View style={styles.phoneBtn}>
                     <TouchableOpacity
                         onPress={connectToServer}
                         style={[styles.button, styles.accept]}
@@ -138,16 +161,16 @@ const VoiceSocketScreen = () => {
                         <Ionicons name="call" style={{ color: '#ffffff', fontSize: 40 }} />
                     </TouchableOpacity>
                     <Text style={styles.textStyle}>Chấp Nhận</Text>
-                </View>
-                {/* {!isRecording ? (<View style={styles.phoneBtn}>
+                </View> */}
+                {!isConnected ? (<View style={styles.phoneBtn}>
                     <TouchableOpacity
-                        onPress={isRecording ? handleStopRecording : startRecording}
+                        onPress={isConnected ? handleStopVoice : connectToServer}
                         style={[styles.button, styles.accept]}
                     >
                         <Ionicons name="call" style={{ color: '#ffffff', fontSize: 40 }} />
                     </TouchableOpacity>
                     <Text style={styles.textStyle}>Chấp Nhận</Text>
-                </View>) : null} */}
+                </View>) : null}
             </View>
         </View>
     );
@@ -168,12 +191,12 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
-        color:'#ffffff'
+        color: '#ffffff'
     },
     text: {
         fontSize: 18,
         marginVertical: 5,
-        color:'#ffffff'
+        color: '#ffffff'
     },
     user: {
         display: 'flex',
