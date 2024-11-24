@@ -15,6 +15,10 @@ import LocalNotification from "../../LocalNotification";
 import MessageDetail from "../../components/MessageDetail";
 import { ratioW, ratioH } from "../../utils/convertUI";
 import Colors from '../../common/var'
+import io, { Socket } from 'socket.io-client';
+
+// Replace with your Flask server URL
+const SOCKET_SERVER_URL = 'http://10.0.2.2:5000';
 
 const { width, height } = Dimensions.get('window');
 
@@ -34,7 +38,8 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
         const permissionGranted = await requestPermission();
         if (permissionGranted) {
             setIsRecording(true);
-            Voice.start('vi-VN'); // Start the voice recognition
+            Voice.start('en-US'); // Start the voice recognition
+            // Voice.start('vi-VN'); // Start the voice recognition
         }
     };
 
@@ -69,18 +74,19 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
         Voice.onSpeechPartialResults = async (e) => {
             console.log("Partial speech results:", e.value);
             setResult((e.value ? e.value[0] : '') + '...'); // Update state with partial recognized text
-            try {
-                const prediction = await detectSpam(e.value ? e.value[0] : '')
-                console.log(prediction.spam);
-                console.log(e.value ? e.value[0] : '');
-                if (prediction.spam) {
-                    // setIsRecording(false);
-                    // Voice.stop();
-                    LocalNotification(e.value ? e.value[0] : '')
-                }
-            } catch (error) {
-                console.log(error);
-            }
+            // try {
+            //     const prediction = await detectSpam(e.value ? e.value[0] : '')
+            //     console.log(prediction.spam);
+            //     console.log(e.value ? e.value[0] : '');
+            //     if (prediction.spam) {
+            //         // setIsRecording(false);
+            //         // Voice.stop();
+            //         // LocalNotification(e.value ? e.value[0] : '')
+            //     }
+            // } catch (error) {
+            //     console.log(error);
+            // }
+            
         };
         Voice.onSpeechError = (e) => {
             console.log("Speech error:", e);
@@ -193,8 +199,8 @@ const styles = StyleSheet.create({
         color: '#ffffff',
     },
     userImg: {
-        width: ratioW(120),
-        height: ratioH(120),
+        width: 120,
+        height: 120,
         borderRadius: 60,
         borderWidth: 1,
         borderColor: '#ffffff'
