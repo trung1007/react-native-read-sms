@@ -56,9 +56,9 @@ const Layout = () => {
         });
     };
     const options = {
-        taskName: 'Example',
-        taskTitle: 'App',
-        taskDesc: 'App is running in background',
+        taskName: 'Background',
+        taskTitle: 'Factual Spam',
+        taskDesc: 'Ứng dụng Factual Spam đang chạy ngầm',
         taskIcon: {
             name: 'ic_launcher',
             type: 'mipmap',
@@ -84,7 +84,7 @@ const Layout = () => {
             const prediction = await detectSpam(message)
             console.log('prediction in ' + appState + ": " + prediction.spam);
             if (prediction.spam) {
-                LocalNotification(message)
+                LocalNotification(message, 'sms')
             }
         } catch (error) {
             console.log(error);

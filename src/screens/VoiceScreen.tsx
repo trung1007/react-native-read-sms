@@ -97,7 +97,7 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                     const prediction = await detectSpam(e.value ? e.value[0] : '')
                     if (prediction.spam) {
                         console.log("Tôi chỉ cảnh báo 1 lần");
-                        LocalNotification(currentResult)
+                        LocalNotification(currentResult, 'phone')
                         hasWarning = true
                     }
                 } catch (error) {
