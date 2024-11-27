@@ -12,6 +12,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import VoiceSocketScreen from "./VoiceSocketScreen";
+import VoiceVolumeScreen from "./VoiceVolumeScreen";
 
 // @ts-ignore
 const MainScreen = ({ handleAllow, allowDetect }) => {
@@ -102,6 +103,7 @@ const MainScreen = ({ handleAllow, allowDetect }) => {
                 }}>
                 {/* <VoiceScreen onClose={() => { setModalVoiceVisible(false) }} /> */}
                 <VoiceSocketScreen onClose={() => { setModalVoiceVisible(false) }}/>
+                {/* <VoiceVolumeScreen /> */}
 
             </Modal>
         </View>

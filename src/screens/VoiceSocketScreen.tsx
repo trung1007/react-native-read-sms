@@ -75,14 +75,6 @@ const VoiceSocketScreen: React.FC<VoiceSocketModal> = ({ onClose }) => {
         };
     }, []);
 
-    const handleStopRecording = () => {
-        // setMessageVisible(true)
-        setIsConnected(false)
-        // onClose()
-        if (!isConnected) {
-            onClose()
-        }
-    };
     const handleStopVoice = () => {
         if (!isConnected) {
             onClose()
