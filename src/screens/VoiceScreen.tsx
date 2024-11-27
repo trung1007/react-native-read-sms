@@ -32,22 +32,32 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
     const [result, setResult] = useState("");
     const [messageVisible, setMessageVisible] = useState(false)
     const [spam, setSpam] = useState<{ spam?: boolean }>({ spam: false })
+    const [endCall, setEndCall] = useState(false)
+    let prePrediction = false
+    let hasWarning = false
+    let preResult = ''
 
     // Start recording
     const startRecording = async () => {
         const permissionGranted = await requestPermission();
         if (permissionGranted) {
             setIsRecording(true);
-            Voice.start('en-US'); // Start the voice recognition
-            // Voice.start('vi-VN'); // Start the voice recognition
+            // Voice.start('en-US'); // Start the voice recognition
+            Voice.start('vi-VN'); // Start the voice recognition
         }
     };
 
     // Stop recording
     const handleStopRecording = () => {
-        setMessageVisible(true)
+        if (endCall) {
+            Voice.stop();
+            // Voice.destroy().then(Voice.removeAllListeners);
+            hasWarning = false
+
+        }
         setIsRecording(false);
-        Voice.stop(); // Stop the voice recognition
+        hasWarning = false
+        // Stop the voice recognition
         // onClose()
         if (!isRecording) {
             onClose()
@@ -57,36 +67,44 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
     const handleVoice = () => {
         setMessageVisible(false)
         // Setup Voice event listeners
-        Voice.onSpeechStart = () => console.log("Speech recognition started");
-        Voice.onSpeechEnd = () => console.log("Speech recognition ended");
+        Voice.onSpeechStart = () => {
+            console.log("Speech recognition started")
+            setEndCall(false)
+        };
+        Voice.onSpeechEnd = () => {
+            console.log("Speech recognition ended")
+            setEndCall(true)
+        };
         Voice.onSpeechResults = async (e) => {
             console.log("Final speech results:", e.value);
             setResult(e.value ? e.value[0] : ''); // Update state with final recognized text
             try {
                 const prediction = await detectSpam(e.value ? e.value[0] : '')
-                console.log('voiceScreen');
                 console.log(prediction);
                 setSpam(prediction)
             } catch (error) {
                 console.log(error);
             }
+            setIsRecording(false);
+            setMessageVisible(true)
         };
         Voice.onSpeechPartialResults = async (e) => {
             console.log("Partial speech results:", e.value);
-            setResult((e.value ? e.value[0] : '') + '...'); // Update state with partial recognized text
-            // try {
-            //     const prediction = await detectSpam(e.value ? e.value[0] : '')
-            //     console.log(prediction.spam);
-            //     console.log(e.value ? e.value[0] : '');
-            //     if (prediction.spam) {
-            //         // setIsRecording(false);
-            //         // Voice.stop();
-            //         // LocalNotification(e.value ? e.value[0] : '')
-            //     }
-            // } catch (error) {
-            //     console.log(error);
-            // }
-            
+            const currentResult = e.value ? e.value[0] : '';
+            // @ts-ignore
+            if (currentResult !== preResult && e.value[0].split(/\s+/).length > 2 && !hasWarning) {
+                try {
+                    const prediction = await detectSpam(e.value ? e.value[0] : '')
+                    if (prediction.spam) {
+                        console.log("Tôi chỉ cảnh báo 1 lần");
+                        LocalNotification(currentResult)
+                        hasWarning = true
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            preResult = currentResult;
         };
         Voice.onSpeechError = (e) => {
             console.log("Speech error:", e);
@@ -107,9 +125,6 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
 
     return (
         <View style={styles.container}>
-            {/* <View style={styles.modalView}>
-               
-            </View> */}
             <View style={styles.user}>
                 <View style={[styles.userInf, !isRecording && styles.userRecord]}>
                     <Text style={[styles.userName, isRecording ? { fontSize: 20 } : { fontSize: 32 }]}>người gọi không xác định</Text>
@@ -122,7 +137,7 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                     <FakeBtnGroup />
                 </View>
             ) : null}
-            {result.length >> 0 ? (<Modal
+            <Modal
                 animationType="fade"
                 transparent={true}
                 visible={messageVisible}
@@ -131,6 +146,7 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                 }}>
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
+                        <MessageDetail message={result} spam={spam} number={'775 313 999'} type={'phone'} />
                         <TouchableOpacity
                             style={styles.closeButton}
                             onPress={() => {
@@ -138,10 +154,9 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
                             }}>
                             <Text style={styles.closeText}>Đóng</Text>
                         </TouchableOpacity>
-                        <MessageDetail message={result} spam={spam} number={'775 313 999'} type={'phone'} />
                     </View>
                 </View>
-            </Modal>) : null}
+            </Modal>
 
             <View style={styles.phoneControl}>
                 <View style={styles.phoneBtn}>

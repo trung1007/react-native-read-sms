@@ -29,17 +29,9 @@ const Header = () => {
           gap: 8,
         }}>
         <Text style={styles.title}>Factual Spam</Text>
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: '600',
-            // color: '#3D550C',
-            color: Colors.subTitle,
-            letterSpacing: 2,
-            lineHeight: 32,
-          }}>
+        <Text style={styles.subTitle}>
           Chào mừng bạn đến với ứng dụng phát hiện{' '}
-          <Text style={{color: Colors.title}}>
+          <Text style={{color: Colors.title, letterSpacing: 2}}>
             tin nhắn và cuộc gọi lừa đảo
           </Text>
         </Text>
@@ -159,7 +151,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: width * 0.9,
-    height: height * 0.6,
+    height: height * 0.8,
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 12,
@@ -180,7 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   title: {
-    fontSize: 48,
+    fontSize: 40,
     letterSpacing: 2,
     // color: '#59981A',
     color: Colors.title,
@@ -190,6 +182,14 @@ const styles = StyleSheet.create({
     marginTop: 200,
     borderBottomWidth: 1,
     borderBottomColor: Colors.title,
+  },
+  subTitle: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: Colors.subTitle,
+    textAlign: 'justify',
+    letterSpacing: 1,
+    lineHeight: 32,
   },
   script: {
     fontSize: 16,
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     gap: 24,
-    marginTop: 16,
+    marginTop: 12,
   },
   feature: {
     display: 'flex',
