@@ -101,8 +101,8 @@ const MainScreen = ({ handleAllow, allowDetect }) => {
                     Alert.alert('Modal has been closed.');
                     setModalVoiceVisible(!modalVoiceVisible);
                 }}>
-                {/* <VoiceScreen onClose={() => { setModalVoiceVisible(false) }} /> */}
-                <VoiceSocketScreen onClose={() => { setModalVoiceVisible(false) }}/>
+                <VoiceScreen onClose={() => { setModalVoiceVisible(false) }} />
+                {/* <VoiceSocketScreen onClose={() => { setModalVoiceVisible(false) }}/> */}
                 {/* <VoiceVolumeScreen /> */}
 
             </Modal>

@@ -3,11 +3,6 @@ import {View, Text, StyleSheet, Image} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const MessageDetail = ({message, spam, number, type}) => {
-  useEffect(() => {
-    console.log('detail');
-
-    console.log(spam);
-  });
 
   const messageType =
     type === 'message' ? 'Nội dung tin nhắn' : 'Nội dung cuộc gọi';
