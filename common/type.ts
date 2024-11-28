@@ -25,3 +25,5 @@ export interface Message{
   spam:any,
   number?:string
 }
+
+export const StartWord = ['Alo', 'alo', 'Xin', 'Xin chào', 'xin chào', 'xin', 'Xin chào bạn', 'Xin chào anh', 'chào bạn', 'chào anh', 'chào', 'ok', 'Ok']

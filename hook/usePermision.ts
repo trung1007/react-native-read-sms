@@ -69,7 +69,7 @@ const usePermission = ():UsePermissionResult => {
   useEffect(() => {
     handleSmsPermissionAndSubscription();
     checkNotificationPermission()
-  }, []);
+  }, [receiveSmsPermission, receivedSmsMessage, receivedSmsPhoneNumber, notifcationPermission]);
 
   return { receiveSmsPermission, receivedSmsMessage, receivedSmsPhoneNumber, notifcationPermission};
 };

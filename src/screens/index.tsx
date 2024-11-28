@@ -95,7 +95,7 @@ const Layout = () => {
             console.log("ứng dụng chưa thể detect trong nền");
         }
         console.log(receivedSmsMessage);
-        
+        console.log(receivedSmsPhoneNumber)
         if (allowDetect &&  appState === 'background') {
             console.log("có thể detect trong nền");
             startBackgroundService()
@@ -112,7 +112,7 @@ const Layout = () => {
                 }
             }
         }
-    }, [appState, message, receivedSmsMessage])
+    }, [appState])
     return (
         <View style={{ flex: 1, backgroundColor: Colors.background }}>
             <Header />

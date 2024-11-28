@@ -34,7 +34,7 @@ const MessageBox = ({message, spam, number}) => {
           {backgroundColor: spam.spam ? '#e12a2a' : '#469A49'},
         ]}>
         <Text style={styles.number}>
-          +84 {number.length > 11 ? `${number.slice(0, 11)}...` : number}
+          {number.length < 12 ? `${'+84 '.concat(number)}` : number}
         </Text>
         <Text style={styles.message}>
           {message.length > 45 ? `${message.slice(0, 45)}...` : message}
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: width * 0.9,
-    height: height * 0.4,
+    height: height * 0.5,
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 12,

@@ -3,7 +3,6 @@ import {View, Text, StyleSheet, Image} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const MessageDetail = ({message, spam, number, type}) => {
-
   const messageType =
     type === 'message' ? 'Nội dung tin nhắn' : 'Nội dung cuộc gọi';
 
@@ -27,8 +26,9 @@ const MessageDetail = ({message, spam, number, type}) => {
               source={require('../assets/img/warning_logo.png')}
             />
             <Text style={styles.message}>
-              {messageType} "{message}"{' '}
-              <Text style={styles.warning}>có dấu hiệu lừa đảo</Text>
+              {messageType} "
+              {message.length > 25 ? message.substring(0, 30) + '...' : message}
+              "<Text style={styles.warning}>có dấu hiệu lừa đảo</Text>
             </Text>
           </View>
         ) : (
