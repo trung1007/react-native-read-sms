@@ -120,10 +120,13 @@ const VoiceScreen: React.FC<ModalContentProps> = ({ onClose }) => {
         Voice.onSpeechStart = () => {
             console.log("Speech recognition started")
             setEndCall(false)
-            setResult('')
         };
         Voice.onSpeechEnd = () => {
             console.log("Speech recognition ended")
+            console.log("Nội dung cuộc hội thoại");
+            
+            console.log(result);
+            setMessageVisible(true)
             setEndCall(true)
             setIsRecording(false)
         };

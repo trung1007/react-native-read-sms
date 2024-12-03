@@ -3,8 +3,15 @@ import {View, Text, StyleSheet, Image} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const MessageDetail = ({message, spam, number, type}) => {
+  useEffect(()=>{
+    console.log(message);
+    
+  },[message])
   const messageType =
     type === 'message' ? 'Nội dung tin nhắn' : 'Nội dung cuộc gọi';
+
+  const filteredNumber = number.length > 11 ? `${number.slice(3, 12)}` : number
+  const showNumber = filteredNumber.match(/.{1,3}/g).join(' ');
 
   return (
     <View style={styles.container}>
@@ -13,7 +20,7 @@ const MessageDetail = ({message, spam, number, type}) => {
       </View>
       <View>
         <Text style={styles.number}>
-          +84 {number.length > 11 ? `${number.slice(0, 11)}...` : number}
+          +84 {showNumber}
         </Text>
       </View>
 
@@ -27,7 +34,7 @@ const MessageDetail = ({message, spam, number, type}) => {
             />
             <Text style={styles.message}>
               {messageType} "
-              {message.length > 25 ? message.substring(0, 30) + '...' : message}
+              {message.length > 25 ? message.substring(0, 25) + '...' : message}
               "<Text style={styles.warning}>có dấu hiệu lừa đảo</Text>
             </Text>
           </View>
