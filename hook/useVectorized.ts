@@ -5,7 +5,7 @@ interface useVectorizedResult {
 }
 
 const useVectorized = (document: string | null): useVectorizedResult => {
-  const dictionary = require('../assets/dictionary/document_vectors.json');
+  const dictionary = require('../assets/dictionary/document_vectors_new.json');
   let vectorizedDocument: [] = [];
 
   if (typeof document === 'string') {
