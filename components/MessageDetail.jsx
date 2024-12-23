@@ -3,15 +3,13 @@ import {View, Text, StyleSheet, Image} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const MessageDetail = ({message, spam, number, type}) => {
-  useEffect(()=>{
-    console.log(message);
-    
-  },[message])
   const messageType =
     type === 'message' ? 'Nội dung tin nhắn' : 'Nội dung cuộc gọi';
 
-  const filteredNumber = number.length > 11 ? `${number.slice(3, 12)}` : number
+  const filteredNumber = number.length > 11 ? `${number.slice(3, 12)}` : number;
   const showNumber = filteredNumber.match(/.{1,3}/g).join(' ');
+
+  const formattedNumber = (number === '775 313 999') ? '0775 313 999' : `+84 ${showNumber}`;
 
   return (
     <View style={styles.container}>
@@ -20,7 +18,7 @@ const MessageDetail = ({message, spam, number, type}) => {
       </View>
       <View>
         <Text style={styles.number}>
-          +84 {showNumber}
+          {formattedNumber}
         </Text>
       </View>
 
@@ -34,8 +32,8 @@ const MessageDetail = ({message, spam, number, type}) => {
             />
             <Text style={styles.message}>
               {messageType} "
-              {message.length > 25 ? message.substring(0, 25) + '...' : message}
-              "<Text style={styles.warning}>có dấu hiệu lừa đảo</Text>
+              {message.length > 110 ? message.substring(0, 110) + '...' : message}"
+              <Text style={styles.warning}> có dấu hiệu lừa đảo </Text>
             </Text>
           </View>
         ) : (
@@ -46,8 +44,9 @@ const MessageDetail = ({message, spam, number, type}) => {
               source={require('../assets/img/safe_logo.png')}
             />
             <Text style={styles.message}>
-              {messageType} "{message}"{' '}
-              <Text style={styles.safe}>không có dấu hiệu lừa đảo</Text>
+              {messageType} "
+              {message.length > 110 ? message.substring(0, 110) + '...' : message} "
+              <Text style={styles.safe}> không có dấu hiệu lừa đảo </Text>
             </Text>
           </View>
         )}
