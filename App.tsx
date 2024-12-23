@@ -13,7 +13,6 @@ import { AppStateProvider } from './context/AppStateContext';
 import { MessageProvider } from './context/MessageContext';
 import TestState from './src/testState';
 import Layout from './src/screens';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 
 
@@ -22,11 +21,9 @@ const App = () => {
   return (
     <AppStateProvider>
       <MessageProvider>
-        <NavigationContainer>
           <SafeAreaView style={styles.container}>
             <Layout />
           </SafeAreaView >
-        </NavigationContainer>
       </MessageProvider>
     </AppStateProvider>
 

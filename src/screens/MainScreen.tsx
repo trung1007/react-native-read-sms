@@ -11,8 +11,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import VoiceSocketScreen from "./VoiceSocketScreen";
-import VoiceVolumeScreen from "./VoiceVolumeScreen";
+
 
 // @ts-ignore
 const MainScreen = ({ handleAllow, allowDetect }) => {
@@ -43,9 +42,9 @@ const MainScreen = ({ handleAllow, allowDetect }) => {
     };
 
     const handleAlert = () => {
+        showAlert()
         console.log("allow in main" + allowDetect);
 
-        showAlert()
     }
 
     return (
